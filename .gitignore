@@ -1,2 +1,5 @@
 /vendor/
-/tests/
+.DS_Store
+.idea
+composer.phar
+composer.lock
