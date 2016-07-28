@@ -1,0 +1,21 @@
+{
+    "name": "alejandropena/tight",
+    "description": "Tight Framework: A PHP Framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alejandro Peña Florentín",
+            "email": "alejandropenaflorentin@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "psr/http-message": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tight\\": "src/"
+        }
+    }
+}
