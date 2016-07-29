@@ -34,16 +34,34 @@ namespace Tight;
 class Utils
 {
 
+    /**
+     * Removes the first ocurrence of a substring in a string
+     * @param string $string String
+     * @param string $substrToRemove Substring to remove
+     * @return string String without $substrToRemove or $string if $substrToRemove hasn't been found
+     */
     public static function removeSubstring($string, $substrToRemove) {
+        // Check index position on $string
         $firstIndex = strpos($string, $substrToRemove);
+        // If $firstIndex is false $substrToRemove wasn't found in $string
         if ($firstIndex === FALSE)
             return $string;
+        // Check last index
         $lastIndex = $firstIndex + strlen($substrToRemove);
+        // Get the substring before $substrToRemove
         $pre = substr($string, 0, $firstIndex);
+        // Get the substring after $substrToRemove
         $post = substr($string, $lastIndex);
+        // Return $pre and $post
         return $pre . $post;
     }
 
+    /**
+     * Check if a substring is in a string
+     * @param string $string String
+     * @param string $strToSearch Substring to search
+     * @return boolean TRUE on success,FALSE otherwise
+     */
     public static function inString($string, $strToSearch) {
         return (strpos($string, $strToSearch) !== FALSE);
     }
