@@ -65,6 +65,7 @@ class Utils
     public static function inString($string, $strToSearch) {
         return (strpos($string, $strToSearch) !== FALSE);
     }
+
     /**
      * Adds a trailing slash to a given path.
      * 
@@ -81,6 +82,7 @@ class Utils
         }
         return $path;
     }
+
     /**
      * Replace all the backslash for slashes
      * 
@@ -90,4 +92,16 @@ class Utils
     public static function filterPath($path) {
         return self::addTrailingSlash(str_replace(DIRECTORY_SEPARATOR, "/", str_replace("\\", "/", $path)));
     }
+
+    /**
+     * Replace repeated substring.
+     * 
+     * @param string $string String
+     * @param string $substring Substring
+     * @return string
+     */
+    public static function removeDouble($string, $substring) {
+        return str_replace($substring . $substring, $substring, $string);
+    }
+
 }
