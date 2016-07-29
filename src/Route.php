@@ -101,7 +101,7 @@ class Route
      * with `$this->middleware`.  Each middleware is checked for is_callable()
      * and an InvalidArgumentException is thrown immediately if it isn't.
      *
-     * @param  Callable|array[Callable]
+     * @param  Callable|array
      * @return \Tight\Route
      * @throws \InvalidArgumentException If argument is not callable or not an array of callables.
      */
@@ -141,9 +141,11 @@ class Route
         $args = func_get_args();
         $this->methods = array_merge($this->methods, $args);
     }
-    public function getParams(){
+
+    public function getParams() {
         return $this->params;
     }
+
     public function match($uri) {
         return ($uri === $this->pattern);
     }
