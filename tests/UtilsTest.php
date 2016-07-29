@@ -85,4 +85,12 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/var/htdocs/",Utils::filterPath($pathUnx));
         $this->assertEquals("/var/htdocs/",Utils::filterPath($pathUnx."/"));
     }
+    /**
+     * @test
+     */
+    public function testUtilsRemoveDouble(){
+        $this->assertEquals("String",Utils::removeDouble("Stringg", "g"));
+        $this->assertEquals("/etc/php",Utils::removeDouble("/etc//php", "/"));
+        $this->assertEquals("Testing",Utils::removeDouble("Testing", "u"));
+    }
 }
