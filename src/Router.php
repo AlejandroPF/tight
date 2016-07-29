@@ -35,9 +35,28 @@ class Router
 {
 
     /**
-     * @var array 
+     * @var array Routes
      */
     protected $routes;
+
+    /**
+     * @var string Base path for rutes. If Router is not instanciated in 
+     * document root this value must be set
+     */
+    private $basePath;
+
+    public function __construct($basePath) {
+        if (null !== $basePath && is_string($basePath) && !empty($basePath)) {
+            $basePath = Utils::filterPath($basePath);
+            if (Utils::inString($basePath, $_SERVER['DOCUMENT_ROOT'])) {
+                $this->basePath = Utils::removeSubstring($basePath, $_SERVER['DOCUMENT_ROOT']);
+            } else {
+                $this->basePath = $basePath;
+            }
+        } else {
+            $this->basePath = "/";
+        }
+    }
 
     /**
      * 
@@ -63,15 +82,16 @@ class Router
     }
 
     public function url($methods, $args) {
-        if (is_string($methods))
+        if (is_string($methods)) {
             $methods = [$methods];
-
+        }
         $pattern = array_shift($args); // 2nd-> Pattern
         $callable = array_pop($args); // Last -> callable
-        $route = new Route($pattern, $callable);
+        $route = new Route(Utils::removeDouble($this->basePath . $pattern, "/"), $callable);
         $route->setHttpMethods($methods);
-        if (count($args) > 0)
+        if (count($args) > 0) {
             $route->setMiddleware($args);
+        }
         $this->routes[] = $route;
         return $this;
     }
