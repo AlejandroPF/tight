@@ -34,7 +34,6 @@ namespace Tight;
 class Tight
 {
 
-    public static $configFile = "config.ini";
     private $config = [];
 
     /**
@@ -45,15 +44,20 @@ class Tight
 
     /**
      * Creates an instance of Tight Framework.
-     * @param array $userConfig Settings to override the config file
+     * @param array $config Settings to override the config file
      */
-    public function __construct(array $userConfig = []) {
-        $this->router = new Router();
+    public function __construct($config = []) {
         set_exception_handler([$this, "exceptionHandler"]);
+        if (is_array($config))
+            $config = new \Tight\TightConfig($config);
+        if (!$config instanceof \Tight\TightConfig)
+            throw new \InvalidArgumentException("Argument passed to Tight::__constructor must be array or <b>\Tight\TightConfig</b> object");
+        $this->config = $config;
+        $this->router = new Router($config->basePath);
     }
 
     public function exceptionHandler($ex) {
-        $lastTrace = $ex->getTrace()[count($ex->getTrace()) -1];
+        $lastTrace = $ex->getTrace()[count($ex->getTrace()) - 1];
         $output = <<<EXC
                 <!DOCTYPE>
                 <html>
@@ -85,14 +89,14 @@ class Tight
                     <body>
                         <h1>Tight Framework Exception</h1>
 EXC;
-        $output .= "<p><strong>".get_class($ex).": </strong>".$ex->getMessage()."</p>";
-        $output .= "<p class='padding-left'>in <strong>".$lastTrace['file']."</strong> at line <strong>".$lastTrace['line']."</strong></p>";
+        $output .= "<p><strong>" . get_class($ex) . ": </strong>" . $ex->getMessage() . "</p>";
+        $output .= "<p class='padding-left'>in <strong>" . $lastTrace['file'] . "</strong> at line <strong>" . $lastTrace['line'] . "</strong></p>";
         $output .= "<br/>";
         $output .= "<p>Stack Trace:</p>";
         $trace = $ex->getTrace();
         for ($index = 0; $index < count($trace); $index++) {
             $el = $trace[$index];
-            $output .= "<p>#".($index + 1).": ".$el['class'].$el['type'].$el['function']."() at <strong>".$el['file']."</strong> at line <strong>".$el['line']."</strong></p>";
+            $output .= "<p>#" . ($index + 1) . ": " . $el['class'] . $el['type'] . $el['function'] . "() at <strong>" . $el['file'] . "</strong> at line <strong>" . $el['line'] . "</strong></p>";
         }
         echo $output;
     }
