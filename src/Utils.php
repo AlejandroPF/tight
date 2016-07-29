@@ -65,5 +65,29 @@ class Utils
     public static function inString($string, $strToSearch) {
         return (strpos($string, $strToSearch) !== FALSE);
     }
-
+    /**
+     * Adds a trailing slash to a given path.
+     * 
+     * This method does not add the trailing slash if is already set.
+     * 
+     * @param string $path Path
+     * @return string 
+     */
+    public static function addTrailingSlash($path) {
+        if (null !== $path && is_string($path) && !empty($path)) {
+            if (substr($path, -1) !== "/") {
+                $path .="/";
+            }
+        }
+        return $path;
+    }
+    /**
+     * Replace all the backslash for slashes
+     * 
+     * @param string $path Path
+     * @return string Converted path
+     */
+    public static function filterPath($path) {
+        return self::addTrailingSlash(str_replace(DIRECTORY_SEPARATOR, "/", str_replace("\\", "/", $path)));
+    }
 }
