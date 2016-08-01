@@ -81,6 +81,12 @@ class Router
         return $this->url(Route::METHOD_UPDATE, func_get_args());
     }
 
+    public function map() {
+        $args = func_get_args();
+        $methods = array_shift($args);
+        return $this->url($methods, $args);
+    }
+
     public function url($methods, $args) {
         if (is_string($methods)) {
             $methods = [$methods];
