@@ -38,6 +38,7 @@ class Route
     const METHOD_POST = "post";
     const METHOD_UPDATE = "update";
     const METHOD_DELETE = "delete";
+    const PARAMETER_CHARACTER = ":";
 
     protected $methods = [];
 
@@ -57,10 +58,25 @@ class Route
      */
     protected $pattern = "";
     protected $callable;
+    private $argsPattern = self::PARAMETER_CHARACTER . "(\\w+)";
 
     public function __construct($pattern, $callable) {
         $this->setPattern($pattern);
         $this->setCallable($callable);
+        $this->filterPattern();
+    }
+
+    private function filterPattern() {
+        $pattern = $this->getPattern();
+        $match = [];
+        $pattern = str_replace("/", "\\/", $pattern);
+        if (preg_match_all("/" . $this->argsPattern . "/", $pattern, $match)) {
+            $strings = $match[0];
+            $parameters = $match[1];
+            $this->params = $parameters;
+            $pattern = str_replace($strings, str_replace(self::PARAMETER_CHARACTER, "", $this->argsPattern), $pattern);
+        }
+        $this->setPattern("/^" . $pattern . "$/");
     }
 
     public function setPattern($pattern) {
@@ -130,6 +146,10 @@ class Route
         return $this->methods;
     }
 
+    /**
+     * Get the pattern
+     * @return string Pattern
+     */
     public function getPattern() {
         return $this->pattern;
     }
@@ -142,12 +162,33 @@ class Route
         $this->methods = array_merge($this->methods, $args);
     }
 
+    /**
+     * Get route parameters
+     * @return array Route parameters
+     */
     public function getParams() {
         return $this->params;
     }
 
     public function match($uri) {
-        return ($uri === $this->pattern);
+        $matches = [];
+        if (preg_match_all($this->pattern, $uri, $matches)) {
+            $params = $this->params;
+            // Remove 1st match, the full string
+            unset($matches[0]);
+            // Fix array index
+            $matches = array_values($matches);
+            // Clear the array parameter
+            $this->params = [];
+            for ($index = 0; $index < count($params); $index++) {
+                $name = $params[$index];
+                $value = $matches[$index][0];
+                // Set parameter
+                $this->params[$name] = $value;
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
