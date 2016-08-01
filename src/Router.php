@@ -52,6 +52,11 @@ class Router
         "notFound" => null, // 404
     ];
 
+    /**
+     * Creates a new instance
+     * @param string $basePath Base path used when creating the routes.If Router
+     *  is not instanciated in server document root this value must be set
+     */
     public function __construct($basePath) {
         if (null !== $basePath && is_string($basePath) && !empty($basePath)) {
             $basePath = Utils::filterPath($basePath);
@@ -71,43 +76,83 @@ class Router
     }
 
     /**
+     * Creates a new route using GET method
      * 
-     * @param type $pattern
-     * @param type $args
-     * @return 
+     * This method need at least 2 arguments: route pattern and callable.
+     * You can create midleware callables which will be executed before the route
+     * callable. 
+     * @return \Tight\Router Fluent method
      */
     public function get() {
 
         return $this->url(Route::METHOD_GET, func_get_args());
     }
 
+    /**
+     * Creates a new route using POST method
+     * 
+     * This method need at least 2 arguments: route pattern and callable.
+     * You can create midleware callables which will be executed before the route
+     * @return type
+     */
     public function post() {
         return $this->url(Route::METHOD_POST, func_get_args());
     }
 
+    /**
+     * Creates a new route using UPDATE method
+     * 
+     * This method need at least 2 arguments: route pattern and callable.
+     * You can create midleware callables which will be executed before the route
+     * callable. 
+     * @return \Tight\Router Fluent method
+     */
     public function update() {
         return $this->url(Route::METHOD_DELETE, func_get_args());
     }
 
+    /**
+     * Creates a new route using DELETE method
+     * 
+     * This method need at least 2 arguments: route pattern and callable.
+     * You can create midleware callables which will be executed before the route
+     * callable. 
+     * @return \Tight\Router Fluent method
+     */
     public function delete() {
         return $this->url(Route::METHOD_UPDATE, func_get_args());
     }
 
+    /**
+     * Creates a new route for the given methods
+     * 
+     * This method need at least 3 arguments: method or array of methods, route pattern and callable.
+     * You can create midleware callables which will be executed before the route
+     * callable. 
+     * @return \Tight\Router Fluent method
+     */
     public function map() {
         $args = func_get_args();
         $methods = array_shift($args);
         return $this->url($methods, $args);
     }
 
-    public function url($methods, $args) {
+    /**
+     * Creates a new route
+     * @param array|string $methods Allowed methods for the route
+     * @param array $args Array of a minimum size of 2 indexes: pattern and callable
+     * @return \Tight\Router Fluent method
+     */
+    private function url($methods, $args) {
         if (is_string($methods)) {
             $methods = [$methods];
         }
-        $pattern = array_shift($args); // 2nd-> Pattern
-        $callable = array_pop($args); // Last -> callable
+        $pattern = array_shift($args); // 1st index-> Pattern
+        $callable = array_pop($args); // Last index-> callable
         $route = new Route(Utils::removeDouble($this->basePath . $pattern, "/"), $callable);
         $route->setHttpMethods($methods);
         if (count($args) > 0) {
+            // Adds the middleware
             $route->setMiddleware($args);
         }
         $this->routes[] = $route;
