@@ -27,8 +27,27 @@ namespace Tight;
  */
 
 /**
- * Description of Route
- *
+ * Route class for creating route http methods defined by patterns
+ * 
+ * MIDDLEWARE
+ * 
+ *  When creating routes you can set 1 or more middleware that will be executed
+ * before the route callable.
+ *  You can set route middleware by adding callables <b>before</b> the last 
+ * parameter, which is the route callable, for the following class methods:
+ * <ul>
+ *  <li>Tight\Router::get,</li>
+ *  <li>Tight\Router::post, </li>
+ *  <li>Tight\Router::update,</li>
+ *  <li>Tight\Router::delete and</li>
+ *  <li>Tight\Router::map.</li>
+ * </ul>
+ * Eg.
+ * <pre>
+ * $router->get("/",'userDefinedFunction',function(){
+ *      echo "Hello World!";
+ * });
+ * </pre>
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
 class Router
