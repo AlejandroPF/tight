@@ -45,6 +45,13 @@ class Router
      */
     private $basePath;
 
+    /**
+     * @var array Array of callables for error handling
+     */
+    private $errorHandler = [
+        "notFound" => null, // 404
+    ];
+
     public function __construct($basePath) {
         if (null !== $basePath && is_string($basePath) && !empty($basePath)) {
             $basePath = Utils::filterPath($basePath);
@@ -56,6 +63,11 @@ class Router
         } else {
             $this->basePath = "/";
         }
+        $this->errorHandler = [
+            "notFound" => function() {
+                echo "Page not found";
+            }
+        ];
     }
 
     /**
@@ -102,6 +114,14 @@ class Router
         return $this;
     }
 
+    /**
+     * Run the router.
+     * 
+     * This method checks the current uri and searches any matched pattern created
+     * as a route.
+     * 
+     * This method must be called the last
+     */
     public function run() {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
@@ -116,12 +136,15 @@ class Router
         if (null !== $found && in_array(strtolower($method), $found->getHttpMethods())) {
             $found->dispatch();
         } else {
-            $this->notFound();
+            call_user_func($this->errorHandler["notFound"]);
         }
     }
 
-    public function notFound() {
-        echo "The requested URL cant be found";
+    /**
+     * Method called when route cant be found
+     */
+    public function notFound($callback) {
+        $this->errorHandler['notFound'] = $callback;
     }
 
 }
