@@ -103,7 +103,7 @@ EXC;
 
     /**
      * 
-     * @return \Tight\Route\Router
+     * @return \Tight\Router
      */
     public function getRouter() {
         return $this->router;
