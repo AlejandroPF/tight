@@ -180,7 +180,8 @@ class Route
             $matches = array_values($matches);
             // Clear the array parameter
             $this->params = [];
-            for ($index = 0; $index < count($params); $index++) {
+            $size = count($params);
+            for ($index = 0; $index < $size; $index++) {
                 $name = $params[$index];
                 $value = $matches[$index][0];
                 // Set parameter
