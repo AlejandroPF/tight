@@ -47,14 +47,6 @@ class TightTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers Tight\Tight::VERSION
-     */
-    public function testTightVersion() {
-        $this->assertEquals("v1.0.0", Tight\Tight::VERSION);
-    }
-
-    /**
-     * @test
      * @covers Tight\Tight::getRouter
      */
     public function testTightGetRouter() {
