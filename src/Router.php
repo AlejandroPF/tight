@@ -127,7 +127,7 @@ class Router
      * @return \Tight\Router Fluent method
      */
     public function update() {
-        return $this->url(Route::METHOD_DELETE, func_get_args());
+        return $this->url(Route::METHOD_UPDATE, func_get_args());
     }
 
     /**
@@ -139,7 +139,7 @@ class Router
      * @return \Tight\Router Fluent method
      */
     public function delete() {
-        return $this->url(Route::METHOD_UPDATE, func_get_args());
+        return $this->url(Route::METHOD_DELETE, func_get_args());
     }
 
     /**
@@ -187,12 +187,24 @@ class Router
      * This method must be called the last
      */
     public function run() {
-        $uri = $_SERVER['REQUEST_URI'];
+        $pattern = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
+        $this->dispatch($pattern, $method);
+    }
+
+    /**
+     * Method called when route cant be found
+     */
+    public function notFound($callback) {
+        $this->errorHandler['notFound'] = $callback;
+    }
+
+    public function dispatch($pattern, $method) {
         $found = null;
         $index = 0;
-        while ($index < count($this->routes) && null === $found) {
-            if ($this->routes[$index]->match($uri) && in_array(strtolower($method), $this->routes[$index]->getHttpMethods())) {
+        $size = count($this->routes);
+        while ($index < $size && null === $found) {
+            if ($this->routes[$index]->match($pattern) && in_array(strtolower($method), $this->routes[$index]->getHttpMethods())) {
                 $found = $this->routes[$index];
             }
             $index++;
@@ -204,11 +216,8 @@ class Router
         }
     }
 
-    /**
-     * Method called when route cant be found
-     */
-    public function notFound($callback) {
-        $this->errorHandler['notFound'] = $callback;
+    public function getRoutes() {
+        return $this->routes;
     }
 
 }
