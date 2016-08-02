@@ -33,7 +33,9 @@ namespace Tight;
  */
 class Tight
 {
+
     const VERSION = "v1.0.0-dev";
+
     private $config = [];
 
     /**
@@ -48,10 +50,12 @@ class Tight
      */
     public function __construct($config = []) {
         set_exception_handler([$this, "exceptionHandler"]);
-        if (is_array($config))
+        if (is_array($config)) {
             $config = new \Tight\TightConfig($config);
-        if (!$config instanceof \Tight\TightConfig)
+        }
+        if (!$config instanceof \Tight\TightConfig) {
             throw new \InvalidArgumentException("Argument passed to Tight::__constructor must be array or <b>\Tight\TightConfig</b> object");
+        }
         $this->config = $config;
         $this->router = new Router($config->basePath);
     }
