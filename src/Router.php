@@ -88,6 +88,9 @@ class Router
             $this->basePath = "/";
         }
         $this->errorHandler = [
+            /**
+             * @codeCoverageIgnore
+             */
             "notFound" => function() {
                 echo "Page not found";
             }
@@ -185,6 +188,7 @@ class Router
      * as a route.
      * 
      * This method must be called the last
+     * @codeCoverageIgnore
      */
     public function run() {
         $pattern = $_SERVER['REQUEST_URI'];

@@ -34,9 +34,16 @@ namespace Tight;
 class Tight
 {
 
-    const VERSION = "v1.0.0-dev";
+    /**
+     * Current Version
+     */
+    const VERSION = "v1.0.0";
 
-    private $config = [];
+    /**
+     *
+     * @var Tight\TightConfig Configuration
+     */
+    private $config = null;
 
     /**
      *
@@ -60,6 +67,11 @@ class Tight
         $this->router = new Router($config->basePath);
     }
 
+    /**
+     * Custom exception handler
+     * @param \Exception $ex Exception
+     * @codeCoverageIgnore
+     */
     public function exceptionHandler($ex) {
         $lastTrace = $ex->getTrace()[count($ex->getTrace()) - 1];
         $output = <<<EXC

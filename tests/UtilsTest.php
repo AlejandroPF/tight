@@ -95,5 +95,4 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/etc/php", Utils::removeDouble("/etc//php", "/"));
         $this->assertEquals("Testing", Utils::removeDouble("Testing", "u"));
     }
-
 }
