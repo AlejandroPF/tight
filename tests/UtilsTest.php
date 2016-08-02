@@ -72,25 +72,28 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testUtilsAddTrailingSlash() {
         $path = "/etc/php5";
-        $this->assertEquals("/etc/php5/",Utils::addTrailingSlash($path));
-        $this->assertEquals("/etc/php5/",Utils::addTrailingSlash($path."/"));
+        $this->assertEquals("/etc/php5/", Utils::addTrailingSlash($path));
+        $this->assertEquals("/etc/php5/", Utils::addTrailingSlash($path . "/"));
     }
+
     /**
      * @test
      */
-    public function testUtilsFilterPath(){
+    public function testUtilsFilterPath() {
         $pathWin = "C:\\php\\ext";
         $pathUnx = "/var/htdocs";
-        $this->assertEquals("C:/php/ext/",Utils::filterPath($pathWin));
-        $this->assertEquals("/var/htdocs/",Utils::filterPath($pathUnx));
-        $this->assertEquals("/var/htdocs/",Utils::filterPath($pathUnx."/"));
+        $this->assertEquals("C:/php/ext/", Utils::filterPath($pathWin));
+        $this->assertEquals("/var/htdocs/", Utils::filterPath($pathUnx));
+        $this->assertEquals("/var/htdocs/", Utils::filterPath($pathUnx . "/"));
     }
+
     /**
      * @test
      */
-    public function testUtilsRemoveDouble(){
-        $this->assertEquals("String",Utils::removeDouble("Stringg", "g"));
-        $this->assertEquals("/etc/php",Utils::removeDouble("/etc//php", "/"));
-        $this->assertEquals("Testing",Utils::removeDouble("Testing", "u"));
+    public function testUtilsRemoveDouble() {
+        $this->assertEquals("String", Utils::removeDouble("Stringg", "g"));
+        $this->assertEquals("/etc/php", Utils::removeDouble("/etc//php", "/"));
+        $this->assertEquals("Testing", Utils::removeDouble("Testing", "u"));
     }
+
 }

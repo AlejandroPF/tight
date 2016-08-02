@@ -1,5 +1,7 @@
 <?php
 
+namespace Tight;
+
 /*
  * The MIT License
  *
@@ -24,8 +26,6 @@
  * THE SOFTWARE.
  */
 
-namespace Tight;
-
 /**
  * Description of TightConfig
  *
@@ -33,23 +33,27 @@ namespace Tight;
  */
 class TightConfig
 {
-    private $config=[
-        "basePath"=>null,
-        
+
+    private $config = [
+        "basePath" => null,
     ];
-    
-    public function __construct(array $config = []){
+
+    public function __construct(array $config = []) {
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
     }
+
     public function __get($name) {
-        if(isset($this->config[$name]))
+        if (isset($this->config[$name])) {
             return $this->config[$name];
-        else
+        } else {
             return null;
+        }
     }
+
     public function __set($name, $value) {
         $this->config[$name] = $value;
     }
+
 }

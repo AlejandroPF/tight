@@ -44,8 +44,9 @@ class Utils
         // Check index position on $string
         $firstIndex = strpos($string, $substrToRemove);
         // If $firstIndex is false $substrToRemove wasn't found in $string
-        if ($firstIndex === FALSE)
+        if ($firstIndex === FALSE) {
             return $string;
+        }
         // Check last index
         $lastIndex = $firstIndex + strlen($substrToRemove);
         // Get the substring before $substrToRemove
