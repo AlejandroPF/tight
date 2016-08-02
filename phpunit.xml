@@ -9,12 +9,21 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-        >
+>
 
     <testsuites>
         <testsuite name="Tight Framework">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
+    
 </phpunit>
