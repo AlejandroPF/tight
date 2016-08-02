@@ -192,7 +192,7 @@ class Router
         $found = null;
         $index = 0;
         while ($index < count($this->routes) && null === $found) {
-            if ($this->routes[$index]->match($uri) and in_array(strtolower($method), $this->routes[$index]->getHttpMethods())) {
+            if ($this->routes[$index]->match($uri) && in_array(strtolower($method), $this->routes[$index]->getHttpMethods())) {
                 $found = $this->routes[$index];
             }
             $index++;
