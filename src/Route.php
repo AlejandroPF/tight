@@ -58,9 +58,10 @@ class Route
      */
     protected $pattern = "";
     protected $callable;
-    private $argsPattern = self::PARAMETER_CHARACTER . "(\\w+)";
+    private $argsPattern = "(\\w+)";
 
     public function __construct($pattern, $callable) {
+        $this->argsPattern = self::PARAMETER_CHARACTER . $this->argsPattern;
         $this->setPattern($pattern);
         $this->setCallable($callable);
         $this->filterPattern();
