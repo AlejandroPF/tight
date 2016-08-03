@@ -36,12 +36,16 @@ class TightConfig
 
     private $config = [
         "basePath" => null,
+        "smarty" => [
+            "template_dir" => "./templates",
+            "compile_dir" => "./templates_c",
+            "config_dir" => "./configs",
+            "cache_dir" => "./cache"
+        ]
     ];
 
     public function __construct(array $config = []) {
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
-        }
+        $this->config = array_replace_recursive($this->config, $config);
     }
 
     public function __get($name) {
@@ -53,7 +57,7 @@ class TightConfig
     }
 
     public function __set($name, $value) {
-        $this->config[$name] = $value;
+        $this->config = array_merge($this->config, [$name => $value]);
     }
 
 }

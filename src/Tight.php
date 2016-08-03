@@ -39,6 +39,8 @@ class Tight
      */
     const VERSION = "v1.0.1";
 
+    private static $INSTANCE = null;
+
     /**
      *
      * @var Tight\TightConfig Configuration
@@ -50,6 +52,7 @@ class Tight
      * @var Tight\Route\Router 
      */
     private $router;
+    private $smarty;
 
     /**
      * Creates an instance of Tight Framework.
@@ -57,14 +60,38 @@ class Tight
      */
     public function __construct($config = []) {
         set_exception_handler([$this, "exceptionHandler"]);
+        $this->setConfig($config);
+        $this->router = new Router($this->config->basePath);
+        $this->smarty = new \Smarty;
+        $this->smarty->template_dir = $this->config->smarty["template_dir"];
+        $this->smarty->compile_dir = $this->config->smarty["compile_dir"];
+        $this->smarty->config_dir = $this->config->smarty["config_dir"];
+        $this->smarty->cache_dir = $this->config->smarty["cache_dir"];
+    }
+
+    public static function getInstance() {
+        if (null !== self::$INSTANCE) {
+            return self::$INSTANCE;
+        } else {
+            return new \Tight\Tight;
+        }
+    }
+
+    public function setConfig($config) {
         if (is_array($config)) {
             $config = new \Tight\TightConfig($config);
-        }
-        if (!$config instanceof \Tight\TightConfig) {
+        } elseif (!$config instanceof \Tight\TightConfig) {
             throw new \InvalidArgumentException("Argument passed to Tight::__constructor must be array or <b>\Tight\TightConfig</b> object");
         }
         $this->config = $config;
-        $this->router = new Router($config->basePath);
+    }
+
+    public function getConfig() {
+        return $this->config;
+    }
+
+    public function getSmarty() {
+        return $this->smarty;
     }
 
     /**

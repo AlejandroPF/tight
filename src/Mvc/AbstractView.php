@@ -34,10 +34,21 @@ namespace Tight\Mvc;
 abstract class AbstractView
 {
 
-    private $htmlFile;
+    private $smarty;
+    private $template;
 
-    public function __construct($htmlFile) {
-        $this->htmlFile = $htmlFile;
+    public function __construct($tpl) {
+        $this->template = $tpl;
+        $app = \Tight\Tight::getInstance();
+        $this->smarty = $app->getSmarty();
+    }
+
+    public function render() {
+        $this->smarty->display($this->template);
+    }
+
+    public function assign($tpl_var, $value = null, $nocache = false) {
+        $this->smarty->assign($tpl_var, $value, $nocache);
     }
 
     public abstract function onLoad();
