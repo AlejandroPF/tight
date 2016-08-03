@@ -27,7 +27,7 @@ namespace Tight;
  */
 
 /**
- * Description of Route
+ * Route class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
@@ -48,26 +48,35 @@ class Route
     protected $params = [];
 
     /**
-     * @var array[Callable] Middleware to be run before only this route instance
+     * @var array Middleware to be run before only this route instance
      */
     protected $middleware = [];
 
     /**
-     *
      * @var string The route pattern (e.g. "/books/:id")
      */
     protected $pattern = "";
     protected $callable;
     private $argsPattern = "(\\w+)";
 
+    /**
+     * Constructor.
+     * 
+     * @param string $pattern Pattern for the route
+     * @param callable $callable Callable to be executed
+     */
     public function __construct($pattern, $callable) {
         $this->argsPattern = self::PARAMETER_CHARACTER . $this->argsPattern;
         $this->setPattern($pattern);
         $this->setCallable($callable);
-        $this->filterPattern();
+        $this->createRegexFromPattern();
     }
 
-    private function filterPattern() {
+    /**
+     * Transforms the pattern to a regular expresion.
+     * This method also catches all the parameters in the pattern
+     */
+    private function createRegexFromPattern() {
         $pattern = $this->getPattern();
         $match = [];
         $pattern = str_replace("/", "\\/", $pattern);
@@ -80,6 +89,12 @@ class Route
         $this->setPattern("/^" . $pattern . "$/");
     }
 
+    /**
+     * Sets the route pattern
+     * @param string $pattern Route pattern
+     * @return \Tight\Route Fluent setter
+     * @throws \InvalidArgumentException If $pattern is not a string
+     */
     public function setPattern($pattern) {
         if (!is_string($pattern)) {
             throw new \InvalidArgumentException('Route name must be a string');
@@ -88,6 +103,10 @@ class Route
         return $this;
     }
 
+    /**
+     * Sets the callable
+     * @param callable $callback Callable to be executed
+     */
     public function setCallable($callback) {
         if (is_callable($callback))
             $this->callable = $callback;
@@ -102,7 +121,7 @@ class Route
 
     /**
      * Get middleware
-     * @return array[Callable]
+     * @return array Array of middleware
      */
     public function getMiddleware() {
         return $this->middleware;
@@ -119,7 +138,7 @@ class Route
      * and an InvalidArgumentException is thrown immediately if it isn't.
      *
      * @param  Callable|array
-     * @return \Tight\Route
+     * @return \Tight\Route Fluent setter
      * @throws \InvalidArgumentException If argument is not callable or not an array of callables.
      */
     public function setMiddleware($middleware) {
@@ -141,7 +160,7 @@ class Route
 
     /**
      * Get supported HTTP methods
-     * @return array
+     * @return array HTTP methods
      */
     public function getHttpMethods() {
         return $this->methods;
@@ -171,9 +190,14 @@ class Route
         return $this->params;
     }
 
-    public function match($uri) {
+    /**
+     * Checks if an expresion match with this route
+     * @param string $pattern Expresion to be matched
+     * @return boolean TRUE on success
+     */
+    public function match($pattern) {
         $matches = [];
-        if (preg_match_all($this->pattern, $uri, $matches)) {
+        if (preg_match_all($this->pattern, $pattern, $matches)) {
             $params = $this->params;
             // Remove 1st match, the full string
             unset($matches[0]);

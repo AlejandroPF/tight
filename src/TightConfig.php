@@ -27,7 +27,7 @@ namespace Tight;
  */
 
 /**
- * Description of TightConfig
+ * TightConfig class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */

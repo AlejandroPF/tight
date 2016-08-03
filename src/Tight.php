@@ -27,7 +27,7 @@ namespace Tight;
  */
 
 /**
- * Description of Tight
+ * Tight framework main class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
@@ -37,7 +37,7 @@ class Tight
     /**
      * Current Version
      */
-    const VERSION = "v1.0.0";
+    const VERSION = "v1.0.1";
 
     /**
      *

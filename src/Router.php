@@ -27,7 +27,7 @@ namespace Tight;
  */
 
 /**
- * Route class for creating route http methods defined by patterns
+ * Router class for creating http route methods defined by patterns
  * 
  * MIDDLEWARE
  * 

@@ -27,7 +27,7 @@
 namespace Tight;
 
 /**
- * Description of Utils
+ * Utils class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
