@@ -49,7 +49,7 @@ class Tight
 
     /**
      *
-     * @var Tight\Route\Router 
+     * @var Tight\Router 
      */
     private $router;
     private $smarty;
