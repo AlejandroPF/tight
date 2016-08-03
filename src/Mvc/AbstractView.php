@@ -51,5 +51,5 @@ abstract class AbstractView
         $this->smarty->assign($tpl_var, $value, $nocache);
     }
 
-    public abstract function onLoad();
+    abstract public function onLoad();
 }
