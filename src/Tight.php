@@ -143,7 +143,12 @@ EXC;
         $trace = $ex->getTrace();
         for ($index = 0; $index < count($trace); $index++) {
             $el = $trace[$index];
-            $output .= "<p>#" . ($index + 1) . ": " . $el['class'] . $el['type'] . $el['function'] . "() at <strong>" . $el['file'] . "</strong> at line <strong>" . $el['line'] . "</strong></p>";
+            $class = isset($el["class"]) ? $el["class"] : "";
+            $type = isset($el["type"]) ? $el["type"] : "";
+            $func = isset($el["function"]) ? $el["function"] : "";
+            $file = isset($el["file"]) ? "at <strong>" . $el["file"] . "</strong>" : "";
+            $line = isset($el["line"]) ? "at line <strong>" . $el["line"] . "</strong>" : "";
+            $output .= "<p>#" . ($index + 1) . ": " . $class . $type . $func . "() ". $file .  $line . "</strong></p>";
         }
         echo $output;
     }
