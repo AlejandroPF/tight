@@ -34,30 +34,36 @@ namespace Tight;
 class TightConfig
 {
 
-    private $config = [
-        "basePath" => null,
-        "smarty" => [
-            "template_dir" => "./templates",
-            "compile_dir" => "./templates_c",
-            "config_dir" => "./configs",
-            "cache_dir" => "./cache"
-        ]
+    public $basePath = null;
+    public $smarty = [
+        "template_dir" => "./templates",
+        "compile_dir" => "./templates_c",
+        "config_dir" => "./configs",
+        "cache_dir" => "./cache"
+    ];
+    public $router = [
+        "useMvc" => false
     ];
 
     public function __construct(array $config = []) {
-        $this->config = array_replace_recursive($this->config, $config);
-    }
-
-    public function __get($name) {
-        if (isset($this->config[$name])) {
-            return $this->config[$name];
-        } else {
-            return null;
+        if (isset($config['basePath'])) {
+            $this->basePath = $config['basePath'];
+            unset($config['basePath']);
         }
-    }
-
-    public function __set($name, $value) {
-        $this->config = array_merge($this->config, [$name => $value]);
+        if (isset($config["smarty"])) {
+            $this->smarty = array_replace_recursive($this->smarty, $config["smarty"]);
+            unset($config["smarty"]);
+        }
+        if (isset($config["router"])) {
+            $this->router = array_replace_recursive($this->router, $config["router"]);
+            unset($config['router']);
+        }
+        // Creates custom config
+        if (count($config) > 0) {
+            foreach ($config as $key => $value) {
+                $this->$key = $value;
+            }
+        }
     }
 
 }
