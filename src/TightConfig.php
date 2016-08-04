@@ -63,6 +63,8 @@ class TightConfig
      * @var array MVC settings
      */
     public $mvc = [
+        "enaleRouter" => false,
+        "indexName"=> "Root",
         "controller_dir" => "./controllers/",
         "model_dir" => "./models/",
         "view_dir" => "./views/",

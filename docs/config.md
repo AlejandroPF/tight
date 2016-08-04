@@ -52,7 +52,8 @@ Any setting can be represented as a key of a section, which can be accessed usin
 | smarty | template_dir | Smarty's templates directory | "./templates" |
 | smarty | compile_dir | Smarty's compile directory | "./templates_c" |
 | smarty | cache_dir | Smarty's cache directory | "./cache/"|
-| router | using_mvc | Checks if router module must create routes dinamically using the request URI and MVC | false|
+| mvc | enableRouter | Checks if router module must create routes dinamically using the request URI and MVC | false |
+| mvc | indexName | Name for the "/" controller,model and view | "Root" |
 | mvc | controller_dir | Directory where controllers can be found | "./controllers/"|
 | mvc | model_dir | Directory where MVC models can be found | "./models/" |
 | mvc | view_dir | Directory where MVC views can be found (do not confuse with templates) | "./views/"|
@@ -67,10 +68,9 @@ $config = [
         "config_dir" => "./configs",
         "cache_dir" => "./cache"
     ],
-    "router"=> [
-        "using_mvc" => false
-    ],
     "mvc" => [
+        "enableRouter" => false,
+        "indexName" => "Root",
         "controller_dir" => "./controllers/",
         "model_dir" => "./models/",
         "view_dir" => "./views/",

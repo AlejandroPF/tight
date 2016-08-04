@@ -246,6 +246,11 @@ class Router
 
     public function runMvc() {
         //@todo Create routes depending on the request URI using MVC
+        $requestUrn = $this->getRequestUrn();
+        if("/" == $requestUrn){
+            $name = \Tight\Tight::getInstance()->getConfig()->mvc["indexName"];
+            echo $name;
+        }
     }
 
 }
