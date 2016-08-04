@@ -220,8 +220,32 @@ class Router
         }
     }
 
+    /**
+     * Gets all routes
+     * @return array Array of Tight\Route
+     */
     public function getRoutes() {
         return $this->routes;
+    }
+
+    /**
+     * Gets the request URN relative to Tight\Router::basePath
+     * 
+     * <b>NOTE</b>
+     * <ul>
+     * <li><b>URL: </b> http://example.com/</li>
+     * <li><b>URN: </b> /path/to/file.html</li>
+     * <li><b>URI: </b> URL + URN
+     * </ul>
+     * @return string Request URN
+     */
+    public function getRequestUrn() {
+        $output = Utils::addTrailingSlash("/" . Utils::removeSubstring($_SERVER['REQUEST_URI'], $this->basePath));
+        return $output;
+    }
+
+    public function runMvc() {
+        //@todo Create routes depending on the request URI using MVC
     }
 
 }
