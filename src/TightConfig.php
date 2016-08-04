@@ -33,10 +33,12 @@ namespace Tight;
  */
 class TightConfig
 {
+
     /**
      * @var string Application base path
      */
     public $basePath = null;
+
     /**
      * @var array Smarty settings
      */
@@ -46,12 +48,17 @@ class TightConfig
         "config_dir" => "./configs",
         "cache_dir" => "./cache"
     ];
+
     /**
      * @var array Router settings
      */
     public $router = [
-        "using_mvc" => false
+        "mvc" => [
+            "enable" => false,
+            "index" => "Root",
+        ]
     ];
+
     /**
      * @var array MVC settings
      */
@@ -60,6 +67,7 @@ class TightConfig
         "model_dir" => "./models/",
         "view_dir" => "./views/",
     ];
+
     /**
      * Constructor
      * 
@@ -79,7 +87,7 @@ class TightConfig
             $this->router = array_replace_recursive($this->router, $config["router"]);
             unset($config['router']);
         }
-        if(isset($config["mvc"])){
+        if (isset($config["mvc"])) {
             $this->mvc = array_replace_recursive($this->mvc, $config["mvc"]);
             unset($config["mvc"]);
         }

@@ -160,7 +160,7 @@ EXC;
      * Runs the router to send response to the request URI
      */
     public function run() {
-        if ($this->config->router["using_mvc"]) {
+        if ($this->config->mvc["enableRouter"]) {
             $this->router->runMvc();
         } else {
             $this->router->run();
