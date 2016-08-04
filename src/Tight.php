@@ -90,6 +90,10 @@ class Tight
         return $this->config;
     }
 
+    /**
+     * 
+     * @return \Smarty
+     */
     public function getSmarty() {
         return $this->smarty;
     }
@@ -150,6 +154,17 @@ EXC;
      */
     public function getRouter() {
         return $this->router;
+    }
+
+    /**
+     * Runs the router to send response to the request URI
+     */
+    public function run() {
+        if ($this->config->router["using_mvc"]) {
+            $this->router->runMvc();
+        } else {
+            $this->router->run();
+        }
     }
 
 }
