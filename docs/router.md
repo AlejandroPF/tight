@@ -52,7 +52,7 @@ $router->post("/",function(){
 $router->map(['get','post'],"/hello/:world",function($arg){
     echo "Get and post method for '/hello/:world' pattern";
 });
-$router->run();
+$app->run(); //or $router->run()
 ```
 
 ## Not found handler
@@ -69,7 +69,7 @@ $router->get("/",function(){
 $router->notFound(function(){
     echo "404: Page not found!";
 });
-$router->run();
+$app->run(); //or $router->run()
 ```
 
 ## Class method
