@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+namespace Tight\Tests;
 /**
  * Description of RouterTest
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit_Framework_TestCase
 {
 
     private $router;
@@ -38,7 +38,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
      * @covers Tight\Router::__construct
      */
     public function setUp() {
-        $this->router = new Tight\Router("");
+        $this->router = new \Tight\Router("");
         $this->router->get("/hello/", function() {
             echo "Hello";
         });
