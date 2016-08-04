@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+namespace Tight\Tests;
 /**
  * Description of TightTest
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
-class TightTest extends PHPUnit_Framework_TestCase
+class TightTest extends \PHPUnit_Framework_TestCase
 {
 
     public $app;
@@ -38,7 +38,7 @@ class TightTest extends PHPUnit_Framework_TestCase
     ];
 
     public function setUp() {
-        $this->app = new Tight\Tight($this->config);
+        $this->app = new \Tight\Tight($this->config);
     }
 
     public function tearDown() {
@@ -51,7 +51,7 @@ class TightTest extends PHPUnit_Framework_TestCase
      */
     public function testTightGetRouter() {
         $router = $this->app->getRouter();
-        $this->assertEquals(new Tight\Router($this->config["basePath"]), $router);
+        $this->assertEquals(new \Tight\Router($this->config["basePath"]), $router);
     }
 
 }
