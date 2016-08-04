@@ -33,18 +33,39 @@ namespace Tight;
  */
 class TightConfig
 {
-
+    /**
+     * @var string Application base path
+     */
     public $basePath = null;
+    /**
+     * @var array Smarty settings
+     */
     public $smarty = [
         "template_dir" => "./templates",
         "compile_dir" => "./templates_c",
         "config_dir" => "./configs",
         "cache_dir" => "./cache"
     ];
+    /**
+     * @var array Router settings
+     */
     public $router = [
-        "useMvc" => false
+        "using_mvc" => false
     ];
-
+    /**
+     * @var array MVC settings
+     */
+    public $mvc = [
+        "controller_dir" => "./controllers/",
+        "model_dir" => "./models/",
+        "view_dir" => "./views/",
+    ];
+    /**
+     * Constructor
+     * 
+     * Settings can be passed as an array
+     * @param array $config Settings
+     */
     public function __construct(array $config = []) {
         if (isset($config['basePath'])) {
             $this->basePath = $config['basePath'];
@@ -57,6 +78,10 @@ class TightConfig
         if (isset($config["router"])) {
             $this->router = array_replace_recursive($this->router, $config["router"]);
             unset($config['router']);
+        }
+        if(isset($config["mvc"])){
+            $this->mvc = array_replace_recursive($this->mvc, $config["mvc"]);
+            unset($config["mvc"]);
         }
         // Creates custom config
         if (count($config) > 0) {
