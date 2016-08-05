@@ -31,7 +31,7 @@ namespace Tight;
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
-class TightConfig
+class TightConfig extends BaseConfig
 {
 
     /**
