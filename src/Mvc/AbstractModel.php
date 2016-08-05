@@ -34,14 +34,37 @@ namespace Tight\Mvc;
 abstract class AbstractModel
 {
 
+    /**
+     * @var array Variables
+     */
     private $vars;
 
+    /**
+     * Sets a variable
+     * @param string $key Variable name
+     * @param mixed $value Variable value
+     * @return \Tight\Mvc\AbstractModel Fluent setter
+     */
     public function set($key, $value) {
         $this->vars[$key] = $value;
+        return $this;
     }
 
+    /**
+     * Gets a defined variable
+     * @param string $key Variable name
+     * @return mixed Variable value or null if variable name cant be found
+     */
     public function get($key) {
         return isset($this->vars[$key]) ? $this->vars[$key] : null;
+    }
+
+    /**
+     * Gets all defined variables
+     * @return array Variables
+     */
+    public function getVars() {
+        return $this->vars;
     }
 
 }
