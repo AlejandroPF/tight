@@ -36,34 +36,88 @@ namespace Tight\Mvc;
 abstract class AbstractController
 {
 
+    /**
+     * @var \Tight\Mvc\AbstractView
+     */
     private $view;
+
+    /**
+     * @var \Tight\Mvc\AbstractModel
+     */
     private $model;
 
     public function __construct(AbstractModel $model, AbstractView $view) {
         $this->setView($view);
         $this->setModel($model);
+        $this->onLoad();
     }
 
+    /**
+     * Gets the view
+     * @return \Tight\Mvc\AbstractView
+     */
     public function getView() {
         return $this->view;
     }
 
+    /**
+     * Gets the model
+     * @return \Tight\Mvc\AbstractModel
+     */
     public function getModel() {
         return $this->model;
     }
 
+    /**
+     * Sets the view
+     * @param \Tight\Mvc\AbstractView $view View
+     * @return \Tight\Mvc\AbstractController Fluent setter
+     */
     public function setView(AbstractView $view) {
         $this->view = $view;
         return $this;
     }
 
+    /**
+     * Sets the model
+     * @param \Tight\Mvc\AbstractModel $model Model
+     * @return \Tight\Mvc\AbstractController Fluent setter
+     */
     public function setModel(AbstractModel $model) {
         $this->model = $model;
         return $this;
     }
 
-    public function renderView() {
-        
+    /**
+     * Event fired when the controller is instanciated 
+     */
+    abstract public function onLoad();
+
+    /**
+     * Event fired before rendering the view
+     */
+    abstract public function onRender();
+
+    /**
+     * Event fired after rendering the view
+     */
+    abstract public function onFinish();
+
+    /**
+     * Renders the view
+     */
+    public function render() {
+        // Fire \Tight\Mvc\AbstractView::onLoad event
+        $this->view->onLoad();
+        // Fire \Tight\Mvc\AbstractController::onRender event
+        $this->onRender();
+        $variables = $this->model->getVars();
+        foreach ($variables as $key => $value) {
+            $this->view->assign($key, $value);
+        }
+        $this->view->render();
+        // Fires \Tight\Mvc\AbstractController::onFinish event
+        $this->onFinish();
     }
 
 }
