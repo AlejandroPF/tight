@@ -92,7 +92,7 @@ class Router
              * @codeCoverageIgnore
              */
             "notFound" => function() {
-                echo "Page not found";
+                return "Page not found";
             }
         ];
     }
@@ -193,7 +193,7 @@ class Router
     public function run() {
         $pattern = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
-        $this->dispatch($pattern, $method);
+        echo $this->dispatch($pattern, $method);
     }
 
     /**
@@ -204,10 +204,11 @@ class Router
     }
 
     private function dispatchNotFound() {
-        call_user_func($this->errorHandler["notFound"]);
+        return call_user_func($this->errorHandler["notFound"]);
     }
 
     public function dispatch($pattern, $method) {
+        $output = null;
         $found = null;
         $index = 0;
         $size = count($this->routes);
@@ -218,10 +219,11 @@ class Router
             $index++;
         }
         if (null !== $found && in_array(strtolower($method), $found->getHttpMethods())) {
-            $found->dispatch();
+            $output = $found->dispatch();
         } else {
-            $this->dispatchNotFound();
+            $output = $this->dispatchNotFound();
         }
+        return $output;
     }
 
     /**

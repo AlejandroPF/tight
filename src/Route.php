@@ -227,11 +227,12 @@ class Route
      * @return bool
      */
     public function dispatch() {
+        $output = "";
         foreach ($this->middleware as $mw) {
-            call_user_func_array($mw, array($this));
+            $output .= call_user_func_array($mw, array($this));
         }
-        $return = call_user_func_array($this->callable, array_values($this->getParams()));
-        return $return;
+        $output .= call_user_func_array($this->callable, array_values($this->getParams()));
+        return $output;
     }
 
 }
