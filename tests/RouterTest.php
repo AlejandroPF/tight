@@ -23,7 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace Tight\Tests;
+
 /**
  * Description of RouterTest
  *
@@ -38,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      * @covers Tight\Router::__construct
      */
     public function setUp() {
-        $this->router = new \Tight\Router("");
+        $this->router = new \Tight\Router("/");
         $this->router->get("/hello/", function() {
             echo "Hello";
         });
@@ -75,8 +77,20 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers \Tight\Router::dispatch
+     * @covers \Tight\Router::getRoutes
+     */
+    public function testRouterDispatch() {
+        $firstRoute = $this->router->getRoutes()[0];
+        $this->router->dispatch($firstRoute->getPattern(), $firstRoute->getHttpMethods()[0]);
+        $this->expectOutputString($firstRoute->dispatch());
+    }
+
+    /**
+     * @test
      * @covers Tight\Router::get
      * @covers Tight\Router::__construct
+     * @depends testRouterDispatch
      */
     public function testRouterGet() {
         $output = "";
@@ -94,7 +108,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @covers Tight\Router::post
-     * @covers Tight\Router::dispatch
+     * @depends testRouterDispatch
      */
     public function testRouterPost() {
         $output = "";
@@ -113,7 +127,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      * @test
      * @covers Tight\Router::map
      * @covers Tight\Router::url
-     * @covers Tight\Router::dispatch
+     * @depends testRouterDispatch
      */
     public function testRouterMap() {
         $output = "";
@@ -131,7 +145,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @covers Tight\Router::update
-     * @covers Tight\Router::dispatch
+     * @depends testRouterDispatch
      */
     public function testRouteUpdate() {
         $output = "";
@@ -146,7 +160,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @covers Tight\Router::delete
-     * @covers Tight\Router::dispatch
+     * @depends testRouterDispatch
      */
     public function testRouteDelete() {
         $output = "";
@@ -161,7 +175,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @covers Tight\Route::setMiddleware
-     * @covers Tight\Router::dispatch
+     * @depends testRouterDispatch
      */
     public function testRouteMiddleware() {
         $output = "";
@@ -176,6 +190,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @covers Tight\Router::notFound
+     * @covers \Tight\Router::dispatchNotFound
+     * @depends testRouterDispatch
      */
     public function testRouteNotFound() {
         $this->router->notFound(function() {
@@ -183,6 +199,23 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         });
         $this->router->dispatch("/invalid/url", "post");
         $this->expectOutputString("Error 404");
+    }
+
+    /**
+     * @test
+     */
+    public function testRouterGetRequestUrn() {
+        $this->assertEquals($_SERVER['REQUEST_URI'], $this->router->getRequestUrn());
+    }
+
+    /**
+     * @test
+     * @covers \Tight\Router::runMvc
+     * @covers \Tight\Router::registerClasses
+     */
+    public function testRouterMvc() {
+        $this->router->runMvc();
+        $this->expectOutputString("Page not found");
     }
 
 }
