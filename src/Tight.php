@@ -98,12 +98,16 @@ class Tight
         return $this->smarty;
     }
 
+    public function exceptionHandler($ex) {
+        self::printException($ex);
+    }
+
     /**
      * Custom exception handler
      * @param \Exception $ex Exception
      * @codeCoverageIgnore
      */
-    public function exceptionHandler($ex) {
+    public static function printException($ex) {
         $lastTrace = $ex->getTrace()[count($ex->getTrace()) - 1];
         $output = <<<EXC
                 <!DOCTYPE>
@@ -147,8 +151,8 @@ EXC;
             $type = isset($el["type"]) ? $el["type"] : "";
             $func = isset($el["function"]) ? $el["function"] : "";
             $file = isset($el["file"]) ? "at <strong>" . $el["file"] . "</strong>" : "";
-            $line = isset($el["line"]) ? "at line <strong>" . $el["line"] . "</strong>" : "";
-            $output .= "<p>#" . ($index + 1) . ": " . $class . $type . $func . "() ". $file .  $line . "</strong></p>";
+            $line = isset($el["line"]) ? " at line <strong>" . $el["line"] . "</strong>" : "";
+            $output .= "<p>#" . ($index + 1) . ": " . $class . $type . $func . "() " . $file . $line . "</strong></p>";
         }
         echo $output;
     }
