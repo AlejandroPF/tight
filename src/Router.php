@@ -203,6 +203,10 @@ class Router
         $this->errorHandler['notFound'] = $callback;
     }
 
+    private function dispatchNotFound() {
+        call_user_func($this->errorHandler["notFound"]);
+    }
+
     public function dispatch($pattern, $method) {
         $found = null;
         $index = 0;
@@ -216,7 +220,7 @@ class Router
         if (null !== $found && in_array(strtolower($method), $found->getHttpMethods())) {
             $found->dispatch();
         } else {
-            call_user_func($this->errorHandler["notFound"]);
+            $this->dispatchNotFound();
         }
     }
 
@@ -244,12 +248,92 @@ class Router
         return $output;
     }
 
+    /**
+     * Method used for autoload classes
+     * @param string $className Class name
+     * @throws \Tight\Exception\FileNotFoundException If directories or files cant be found
+     */
+    private function registerClasses($className) {
+        $config = \Tight\Tight::getInstance()->getConfig();
+        $directoryNotFound = false;
+        $fileNotFound = false;
+        $controllerDir = $config->mvc["controller_dir"];
+        $modelDir = $config->mvc["model_dir"];
+        $viewDir = $config->mvc["view_dir"];
+        if (is_dir($controllerDir) && is_dir($modelDir) && is_dir($viewDir)) {
+            if (strpos(strtolower($className), "controller") !== FALSE) {
+                if (is_file($controllerDir . $className . ".php")) {
+                    require_once $controllerDir . $className . ".php";
+                } else {
+                    $fileNotFound = $controllerDir . $className . ".php";
+                }
+            } elseif (strpos(strtolower($className), "model") !== FALSE) {
+                if (is_file($modelDir . $className . ".php")) {
+                    require_once $modelDir . $className . ".php";
+                } else {
+                    $fileNotFound = $modelDir . $className . ".php";
+                }
+            } elseif (strpos(strtolower($className), "view") !== FALSE) {
+                if (is_file($viewDir . $className . ".php")) {
+                    require_once $viewDir . $className . ".php";
+                } else {
+                    $fileNotFound = $viewDir . $className . ".php";
+                }
+            }
+        } else {
+            $directoryNotFound = true;
+        }
+        if ($directoryNotFound) {
+            $err = !is_dir($controllerDir) ? "Controller directory cant be found" : !is_dir($modelDir) ? "Model directory cant be found" : "View directory cant be found";
+            throw new \Tight\Exception\FileNotFoundException($err);
+        } else if ($fileNotFound) {
+            $err = "File <strong>" . $fileNotFound . "</strong> not found";
+            throw new \Tight\Exception\FileNotFoundException($err);
+        }
+    }
+
     public function runMvc() {
-        //@todo Create routes depending on the request URI using MVC
-        $requestUrn = $this->getRequestUrn();
-        if("/" == $requestUrn){
-            $name = \Tight\Tight::getInstance()->getConfig()->mvc["indexName"];
-            echo $name;
+        try {
+            $config = \Tight\Tight::getInstance()->getConfig();
+            $requestUrn = $this->getRequestUrn();
+            spl_autoload_register(array($this, "registerClasses"), TRUE, TRUE);
+            $name = "";
+            $method = null;
+            $args = [];
+            if ("/" == $requestUrn) {
+                $name = \Tight\Tight::getInstance()->getConfig()->mvc["indexName"];
+            } else {
+                $requestUrn = trim($requestUrn, "/");
+                $explode = explode("/", $requestUrn);
+                $name = array_shift($explode);
+                if (count($explode) > 0) {
+                    $method = array_shift($explode);
+                    if (count($explode) > 0) {
+                        $args = $explode;
+                    }
+                }
+            }
+            $name = ucwords($name);
+            $contName = $name . "Controller";
+            $viewName = $name . "View";
+            $modName = $name . "Model";
+            $model = new $modName();
+            $view = new $viewName();
+            $controller = new $contName($model, $view);
+            if ("" !== $method && !empty($method)) {
+                if (method_exists($controller, $method)) {
+                    call_user_method_array($method, $controller, $args);
+                } else {
+                    throw new \Tight\Exception\FileNotFoundException("Method <strong>" . $method . "</strong> not defined for <strong>" . $contName . "</strong> class");
+                }
+            }
+            $controller->render();
+        } catch (\Tight\Exception\FileNotFoundException $ex) {
+            $this->dispatchNotFound();
+        } catch (\SmartyException $ex) {
+            $this->dispatchNotFound();
+        } catch (\Exception $ex) {
+            \Tight\Tight::printException($ex);
         }
     }
 
