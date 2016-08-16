@@ -105,4 +105,25 @@ class Utils
         return str_replace($substring . $substring, $substring, $string);
     }
 
+    /**
+     * Slices a file into name and extension
+     * 
+     * @param string $filePath File path
+     * @return array Associative array with 2 keys: name and extension
+     */
+    public static function getSlicedFile($filePath) {
+        $output = [];
+        $filePath = str_replace("\\", "/", $filePath);
+        if (is_file($filePath)) {
+            // Removes the path
+            $explodePath = explode("/", $filePath);
+            $file = $explodePath[count($explodePath) - 1];
+            $explode = explode(".", $file);
+            $extension = array_pop($explode);
+            $output["name"] = implode(".", $explode);
+            $output["ext"] = $extension;
+        }
+        return $output;
+    }
+
 }
