@@ -42,7 +42,7 @@ class LocalizeConfig extends \Tight\BaseConfig
     public $resourceFolder = "./res/";
     public $resourceFileName = "values";
     public $resourceFileType = LocalizeConfig::FILETYPE_JSON;
-    
+
     /**
      * @var string String separator for between file name and locale name. Eg. values_en.json, values_fr.json, etc.
      */

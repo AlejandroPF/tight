@@ -27,7 +27,7 @@
 namespace Tight\Modules\Localize;
 
 /**
- * Description of Localize
+ * Localize module for translations
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
@@ -35,18 +35,32 @@ class Localize extends \Tight\Modules\AbstractModule
 {
 
     private $config;
+    private $resourceFileType;
     private $locale;
     private $values;
 
-    public function __construct(LocalizeConfig $config) {
+    public function __construct($config = []) {
+        if (is_array($config)) {
+            $config = new LocalizeConfig($config);
+        } else if (!is_a($config, "\Tight\Modules\Localize\LocalizeConfig")) {
+            throw new \InvalidArgumentException("Argument 1 passed to " . get_class($this) . " must be an array or an instance of Tight\Modules\Localize\LocalizeConfig");
+        }
         parent::__construct();
         $this->setConfig($config);
+        $this->setResourceFileType($this->config->resourceFileType);
         $this->checkDependences();
         $this->setLocale($this->config->defaultLocale);
     }
-    public function getValues(){
+
+    public function setResourceFileType($resourceFileType) {
+        $this->resourceFileType = $resourceFileType;
+        return $this;
+    }
+
+    public function getValues() {
         return $this->values;
     }
+
     public function reloadConfig() {
         $this->locale = $this->config->defaultLocale;
     }
@@ -68,15 +82,16 @@ class Localize extends \Tight\Modules\AbstractModule
         $fileName = $this->config->resourceFileName . $this->config->langSeparator . $locale . "." . $this->config->resourceFileType;
         $file = $folder . $fileName;
         if (is_file($file)) {
-            echo $file;
+            $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
         } else {
             $fileName = $this->config->resourceFileName . "." . $this->config->resourceFileType;
             $file = $folder . $fileName;
-            if (!is_file($file)) {
+            if (is_file($file)) {
+                $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
+            } else {
                 throw new \Tight\Modules\ModuleException("Resource file <strong>" . $file . "</strong> not found");
             }
         }
-        $this->values = json_decode(file_get_contents($file));
     }
 
     /**
@@ -100,20 +115,28 @@ class Localize extends \Tight\Modules\AbstractModule
             }
         }
         foreach ($files as $element) {
+            $file = \Tight\Utils::getSlicedFile($directory . $element);
             //Removes extension
-            $name = explode(".", $element)[0];
+            $name = $file["name"];
             $explode = explode($this->config->langSeparator, $name);
-            if (count($explode) > 1) {
-                $output[] = $explode[count($explode) - 1];
-            } else {
-                $output[] = $this->config->defaultLocale;
+            // Get the locale of the defined file type
+            if ($file["ext"] == $this->config->resourceFileType) {
+                if (count($explode) > 1) {
+                    $output[] = $explode[count($explode) - 1];
+                } else {
+                    $output[] = $this->config->defaultLocale;
+                }
             }
         }
         return $output;
     }
 
     public function get($key) {
-        
+        if (isset($this->values[$key])) {
+            return $this->values[$key];
+        } else {
+            return "";
+        }
     }
 
 }
