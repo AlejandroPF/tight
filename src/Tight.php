@@ -136,19 +136,19 @@ class Tight
 
     /**
      * Custom exception handler
-     * @param \Exception $ex Exception
+     * @param \Exception $exception Exception
      */
-    public function exceptionHandler($ex) {
-        self::printException($ex);
+    public function exceptionHandler($exception) {
+        self::printException($exception);
     }
 
     /**
      * Custom exception handler
-     * @param \Exception $ex Exception
+     * @param \Exception $exception Exception
      * @codeCoverageIgnore
      */
-    public static function printException($ex) {
-        $lastTrace = $ex->getTrace()[count($ex->getTrace()) - 1];
+    public static function printException($exception) {
+        $lastTrace = $exception->getTrace()[count($exception->getTrace()) - 1];
         $output = <<<EXC
                 <!DOCTYPE>
                 <html>
@@ -180,12 +180,13 @@ class Tight
                     <body>
                         <h1>Tight Framework Exception</h1>
 EXC;
-        $output .= "<p><strong>" . get_class($ex) . ": </strong>" . $ex->getMessage() . "</p>";
+        $output .= "<p><strong>" . get_class($exception) . ": </strong>" . $exception->getMessage() . "</p>";
         $output .= "<p class='padding-left'>in <strong>" . $lastTrace['file'] . "</strong> at line <strong>" . $lastTrace['line'] . "</strong></p>";
         $output .= "<br/>";
         $output .= "<p>Stack Trace:</p>";
-        $trace = $ex->getTrace();
-        for ($index = 0; $index < count($trace); $index++) {
+        $trace = $exception->getTrace();
+        $size = count($trace);
+        for ($index = 0; $index < $size; $index++) {
             $el = $trace[$index];
             $class = isset($el["class"]) ? $el["class"] : "";
             $type = isset($el["type"]) ? $el["type"] : "";
