@@ -53,12 +53,17 @@ class Tight
      */
     private $router;
     private $smarty;
-
+    /**
+     * @var \Tight\Modules\Localize\Localize
+     */
+    private $locale;
+    public static $a = 0;
     /**
      * Creates an instance of Tight Framework.
      * @param array $config Settings to override the config file
      */
     public function __construct($config = []) {
+        self::$INSTANCE = $this;
         set_exception_handler([$this, "exceptionHandler"]);
         $this->setConfig($config);
         $this->router = new Router($this->config->basePath);
@@ -67,6 +72,7 @@ class Tight
         $this->smarty->compile_dir = $this->config->smarty["compile_dir"];
         $this->smarty->config_dir = $this->config->smarty["config_dir"];
         $this->smarty->cache_dir = $this->config->smarty["cache_dir"];
+        $this->locale = new \Tight\Modules\Localize\Localize($this->config->locale);
     }
 
     public static function getInstance() {
@@ -96,6 +102,13 @@ class Tight
      */
     public function getSmarty() {
         return $this->smarty;
+    }
+    /**
+     * Gets locale
+     * @return \Tight\Modules\Localize\Localize
+     */
+    public function getLocale() {
+        return $this->locale;
     }
 
     public function exceptionHandler($ex) {

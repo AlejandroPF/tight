@@ -63,12 +63,13 @@ class TightConfig extends BaseConfig
      * @var array MVC settings
      */
     public $mvc = [
-        "enaleRouter" => false,
-        "indexName"=> "Root",
+        "enableRouter" => false,
+        "indexName" => "Root",
         "controller_dir" => "./controllers/",
         "model_dir" => "./models/",
         "view_dir" => "./views/",
     ];
+    public $locale = [];
 
     /**
      * Constructor
@@ -92,6 +93,10 @@ class TightConfig extends BaseConfig
         if (isset($config["mvc"])) {
             $this->mvc = array_replace_recursive($this->mvc, $config["mvc"]);
             unset($config["mvc"]);
+        }
+        if (isset($config['locale'])) {
+            $this->locale = $config['locale'];
+            unset($config['locale']);
         }
         // Creates custom config
         if (count($config) > 0) {
