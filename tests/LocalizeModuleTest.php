@@ -35,7 +35,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 {
 
     public static $resourceFolder = "resources";
-    private $locale_en = [
+    private $localeEn = [
         "app" => "Test App",
         "data" => [
             "name" => "Name",
@@ -43,7 +43,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
             "password" => "Passowrd",
         ]
     ];
-    private $locale_es = [
+    private $localeEs = [
         "app" => "Test de aplicación",
         "data" => [
             "name" => "Nombre",
@@ -51,7 +51,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
             "password" => "Contraseña"
         ]
     ];
-    private $locale_fr = [
+    private $localeFr = [
         "app" => "Test d'application",
         "data" => [
             "name" => "Nom",
@@ -71,13 +71,13 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
             mkdir(self::$resourceFolder);
         }
         if (!is_file($valuesFile_en)) {
-            file_put_contents($valuesFile_en, json_encode($this->locale_en));
+            file_put_contents($valuesFile_en, json_encode($this->localeEn));
         }
         if (!is_file($valuesFile_es)) {
-            file_put_contents($valuesFile_es, json_encode($this->locale_es));
+            file_put_contents($valuesFile_es, json_encode($this->localeEs));
         }
         if (!is_file($valuesFile_fr)) {
-            file_put_contents($valuesFile_fr, json_encode($this->locale_fr));
+            file_put_contents($valuesFile_fr, json_encode($this->localeFr));
         }
         $this->config = [
             "resourceFolder" => "./" . self::$resourceFolder . "/"
@@ -144,7 +144,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testLocalizeModuleGetValues() {
-        $expected = $this->locale_en;
+        $expected = $this->localeEn;
         $this->assertEquals($expected, $this->module->getValues());
     }
 
@@ -162,7 +162,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @covers \Tight\Modules\Localize\Localize::setLocale
      */
     public function testLocalizeModuleSetLocale() {
-        $expected = $this->locale_es;
+        $expected = $this->localeEs;
         $this->module->setLocale("es");
         $this->assertEquals($expected, $this->module->getValues());
     }
@@ -172,14 +172,14 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @depends testLocalizeModuleSetLocale
      */
     public function testLocalizeModuleGet() {
-        $this->assertEquals($this->locale_en['app'], $this->module->get("app"));
-        $this->assertEquals($this->locale_en['data']['name'], $this->module->get("data")['name']);
+        $this->assertEquals($this->localeEn['app'], $this->module->get("app"));
+        $this->assertEquals($this->localeEn['data']['name'], $this->module->get("data")['name']);
         $this->module->setLocale("es");
-        $this->assertEquals($this->locale_es['app'], $this->module->get("app"));
-        $this->assertEquals($this->locale_es['data']['name'], $this->module->get("data")['name']);
+        $this->assertEquals($this->localeEs['app'], $this->module->get("app"));
+        $this->assertEquals($this->localeEs['data']['name'], $this->module->get("data")['name']);
         $this->module->setLocale("fr");
-        $this->assertEquals($this->locale_fr['app'], $this->module->get("app"));
-        $this->assertEquals($this->locale_fr['data']['name'], $this->module->get("data")['name']);
+        $this->assertEquals($this->localeFr['app'], $this->module->get("app"));
+        $this->assertEquals($this->localeFr['data']['name'], $this->module->get("data")['name']);
         $this->module->setLocale("en");
         $this->assertEmpty($this->module->get("keyNotDefined"));
     }

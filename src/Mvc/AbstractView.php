@@ -65,13 +65,13 @@ abstract class AbstractView
 
     /**
      * Delegate method from \Smarty::assign
-     * @param string $tpl_var
+     * @param string $tplVar
      * @param string  $value
      * @param boolean $nocache
      * @uses \Smarty::assign 
      */
-    public function assign($tpl_var, $value = null, $nocache = false) {
-        $this->smarty->assign($tpl_var, $value, $nocache);
+    public function assign($tplVar, $value = null, $nocache = false) {
+        $this->smarty->assign($tplVar, $value, $nocache);
     }
 
     /**

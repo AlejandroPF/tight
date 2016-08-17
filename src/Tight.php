@@ -187,12 +187,12 @@ EXC;
         $trace = $exception->getTrace();
         $size = count($trace);
         for ($index = 0; $index < $size; $index++) {
-            $el = $trace[$index];
-            $class = isset($el["class"]) ? $el["class"] : "";
-            $type = isset($el["type"]) ? $el["type"] : "";
-            $func = isset($el["function"]) ? $el["function"] : "";
-            $file = isset($el["file"]) ? "at <strong>" . $el["file"] . "</strong>" : "";
-            $line = isset($el["line"]) ? " at line <strong>" . $el["line"] . "</strong>" : "";
+            $element = $trace[$index];
+            $class = isset($element["class"]) ? $element["class"] : "";
+            $type = isset($element["type"]) ? $element["type"] : "";
+            $func = isset($element["function"]) ? $element["function"] : "";
+            $file = isset($element["file"]) ? "at <strong>" . $element["file"] . "</strong>" : "";
+            $line = isset($element["line"]) ? " at line <strong>" . $element["line"] . "</strong>" : "";
             $output .= "<p>#" . ($index + 1) . ": " . $class . $type . $func . "() " . $file . $line . "</strong></p>";
         }
         echo $output;
