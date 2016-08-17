@@ -289,7 +289,7 @@ class Router
         if ($directoryNotFound) {
             $err = !is_dir($controllerDir) ? "Controller directory cant be found" : !is_dir($modelDir) ? "Model directory cant be found" : "View directory cant be found";
             throw new \Tight\Exception\FileNotFoundException($err);
-        } else if ($fileNotFound) {
+        } else if ($fileNotFound !== false) {
             $err = "File <strong>" . $fileNotFound . "</strong> not found";
             throw new \Tight\Exception\FileNotFoundException($err);
         }
@@ -297,7 +297,6 @@ class Router
 
     public function runMvc() {
         try {
-            $config = \Tight\Tight::getInstance()->getConfig();
             $requestUrn = $this->getRequestUrn();
             spl_autoload_register(array($this, "registerClasses"), TRUE, TRUE);
             $name = "";

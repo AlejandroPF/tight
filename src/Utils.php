@@ -53,7 +53,7 @@ class Utils
         $pre = substr($string, 0, $firstIndex);
         // Get the substring after $substrToRemove
         $post = substr($string, $lastIndex);
-        // Return $pre and $post
+        // Return pre and post
         return $pre . $post;
     }
 

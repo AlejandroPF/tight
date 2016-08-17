@@ -35,7 +35,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 {
 
     private $router;
-    private $a = "a";
 
     /**
      * @covers Tight\Router::__construct
@@ -181,8 +180,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      * @covers \Tight\Router::registerClasses
      */
     public function testRouterMvc() {
-        /* $this->router->runMvc();
-          $this->expectOutputString("Page not found"); */
+        $this->router->runMvc();
+        $this->expectOutputString("");
     }
 
 }
