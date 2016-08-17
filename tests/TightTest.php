@@ -23,7 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace Tight\Tests;
+
 /**
  * Description of TightTest
  *
@@ -34,15 +36,21 @@ class TightTest extends \PHPUnit_Framework_TestCase
 
     public $app;
     public $config = [
-        "basePath" => ""
+        "basePath" => "",
     ];
 
+    /**
+     * @covers \Tight\TightConfig::__construct
+     * @covers \Tight\TightConfig::parseConfig
+     */
     public function setUp() {
-        $this->app = new \Tight\Tight($this->config);
+        mkdir("res");
+        $config = new \Tight\TightConfig($this->config);
+        $this->app = new \Tight\Tight($config);
     }
 
     public function tearDown() {
-        
+        rmdir("res");
     }
 
     /**
