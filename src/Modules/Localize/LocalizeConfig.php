@@ -38,10 +38,25 @@ class LocalizeConfig extends \Tight\BaseConfig
     const FILETYPE_XML = "xml";
     const FILETYPE_INI = "ini";
 
+    /**
+     * @var string Default locale for the default file 'name.ext'
+     */
     public $defaultLocale = "en";
+
+    /**
+     * @var string Resource directory where files will be placed
+     */
     public $resourceFolder = "./res/";
+
+    /**
+     * @var string Name of the resource files
+     */
     public $resourceFileName = "values";
-    public $resourceFileType = LocalizeConfig::FILETYPE_JSON;
+
+    /**
+     * @var string Resource file type
+     */
+    public $resourceFileType = self::FILETYPE_JSON;
 
     /**
      * @var string String separator for between file name and locale name. Eg. values_en.json, values_fr.json, etc.

@@ -34,11 +34,33 @@ namespace Tight\Modules\Localize;
 class Localize extends \Tight\Modules\AbstractModule
 {
 
+    /**
+     * @var \Tight\Modules\Localize\LocalizeConfig Class configuration
+     */
     private $config;
+
+    /**
+     * @var string Resource file type
+     */
     private $resourceFileType;
+
+    /**
+     * @var string Current locale
+     */
     private $locale;
+
+    /**
+     * @var array Associative array for the current locale
+     */
     private $values;
 
+    /**
+     * Constructor
+     * 
+     * @param array|\Tight\Modules\Localize\LocalizeConfig $config
+     * @throws \InvalidArgumentException If $config is not an array or an object
+     * of \Tight\Modules\Localize\LocalizeConfig class
+     */
     public function __construct($config = []) {
         if (is_array($config)) {
             $config = new \Tight\Modules\Localize\LocalizeConfig($config);
@@ -52,30 +74,57 @@ class Localize extends \Tight\Modules\AbstractModule
         $this->setLocale($this->config->defaultLocale);
     }
 
+    /**
+     * Sets the resource file type
+     * @param string $resourceFileType Resource file type
+     * @return \Tight\Modules\Localize\Localize Fluent setter
+     */
     public function setResourceFileType($resourceFileType) {
         $this->resourceFileType = $resourceFileType;
         return $this;
     }
 
+    /**
+     * Gets all the defined values for the current locale
+     * @return array Associative array of values
+     */
     public function getValues() {
         return $this->values;
     }
 
+    /**
+     * Reloads the class with the new locale
+     */
     public function reloadConfig() {
         $this->locale = $this->config->defaultLocale;
     }
 
+    /**
+     * Checks the dependences for the class
+     * @throws \Tight\Modules\ModuleException If resource directory cant be 
+     * found
+     */
     private function checkDependences() {
         if (!is_dir($this->config->resourceFolder)) {
             throw new \Tight\Modules\ModuleException("Resource directory not found");
         }
     }
 
+    /**
+     * Sets the class configuration
+     * @param \Tight\Modules\Localize\LocalizeConfig $config Class configuration
+     */
     public function setConfig(LocalizeConfig $config) {
         $this->config = $config;
         $this->reloadConfig();
     }
 
+    /**
+     * Sets a new locale
+     * @param string $locale New defined locale
+     * @throws \Tight\Modules\ModuleException If resource default resource file
+     * cant be found
+     */
     public function setLocale($locale) {
         $this->locale = $locale;
         $folder = \Tight\Utils::addTrailingSlash($this->config->resourceFolder);
@@ -96,12 +145,16 @@ class Localize extends \Tight\Modules\AbstractModule
 
     /**
      * Gets the module configuration
-     * @return \Tight\Modules\Localize\LocalizeConfig
+     * @return \Tight\Modules\Localize\LocalizeConfig Class configuration
      */
     public function getConfig() {
         return $this->config;
     }
 
+    /**
+     * Gets the available locales
+     * @return array Available locales
+     */
     public function getLocales() {
         $output = [];
         $directory = $this->config->resourceFolder;
@@ -131,6 +184,12 @@ class Localize extends \Tight\Modules\AbstractModule
         return $output;
     }
 
+    /**
+     * Gets a value from a defined key
+     * @param string $key Key
+     * @return string Value defined for the key $key or an empty string if the
+     * key is not defined
+     */
     public function get($key) {
         if (isset($this->values[$key])) {
             return $this->values[$key];
