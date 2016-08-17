@@ -159,7 +159,6 @@ class Localize extends \Tight\Modules\AbstractModule
         $output = [];
         $directory = $this->config->resourceFolder;
         $fileName = $this->config->resourceFileName;
-        $fileType = $this->config->resourceFileType;
         $dir = opendir($directory);
         $files = [];
         while ($entry = readdir($dir)) {
