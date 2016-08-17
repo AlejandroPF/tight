@@ -39,7 +39,7 @@ class Localize extends \Tight\Modules\AbstractModule
     private $locale;
     private $values;
 
-    public function __construct($config = []) { 
+    public function __construct($config = []) {
         if (is_array($config)) {
             $config = new \Tight\Modules\Localize\LocalizeConfig($config);
         } else if (!$config instanceof \Tight\Modules\Localize\LocalizeConfig) {

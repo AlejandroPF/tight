@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2016 Alejandro Peña Florentín (alejandropenaflorentin@gmail.com).
@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$_SERVER["DOCUMENT_ROOT"]="/var/www/";
-$_SERVER["REQUEST_METHOD"] ="GET";
-$_SERVER["REQUEST_URI"] ="/tests/";
+$_SERVER["DOCUMENT_ROOT"] = "/var/www/";
+$_SERVER["REQUEST_METHOD"] = "GET";
+$_SERVER["REQUEST_URI"] = "/tests/";
 require_once "./vendor/autoload.php";

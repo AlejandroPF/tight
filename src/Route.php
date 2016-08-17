@@ -224,7 +224,7 @@ class Route
      * registered for the route, each callable middleware is invoked in
      * the order specified.
      *
-     * @return bool
+     * @return string
      */
     public function dispatch() {
         $output = "";

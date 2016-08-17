@@ -95,14 +95,16 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/etc/php", Utils::removeDouble("/etc//php", "/"));
         $this->assertEquals("Testing", Utils::removeDouble("Testing", "u"));
     }
+
     /**
      * @test
      */
-    public function testUtilsGetSlicedFile(){
+    public function testUtilsGetSlicedFile() {
         $expected = [
-            "name"=>"UtilsTest",
-            "ext"=>"php"
+            "name" => "UtilsTest",
+            "ext" => "php"
         ];
         $this->assertEquals($expected, \Tight\Utils::getSlicedFile(__FILE__));
     }
+
 }

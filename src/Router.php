@@ -115,7 +115,7 @@ class Router
      * 
      * This method need at least 2 arguments: route pattern and callable.
      * You can create midleware callables which will be executed before the route
-     * @return type
+     * @return \Tight\Router Fluent method
      */
     public function post() {
         return $this->url(Route::METHOD_POST, func_get_args());
@@ -198,6 +198,7 @@ class Router
 
     /**
      * Method called when route cant be found
+     * @param \Closure $callback Callback function for not found handler
      */
     public function notFound($callback) {
         $this->errorHandler['notFound'] = $callback;
