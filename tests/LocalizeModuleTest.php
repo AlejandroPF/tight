@@ -23,7 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace Tight\Tests;
+
 /**
  * Description of LocalizeModuleTest
  *
@@ -89,6 +91,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Tight\Modules\ModuleException
      */
     public function testLocalizeModuleExceptionDirectoryNotFound() {
         $config = ["resourceFolder" => "directoryNotFound"];
@@ -98,6 +101,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Tight\Modules\ModuleException
      */
     public function testLocalizeModuleExceptionInvalidLocale() {
         $config = [
@@ -129,6 +133,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
     public function testLocalizeModuleInvalidArgumentException() {
         $this->setExpectedException("\InvalidArgumentException");

@@ -64,7 +64,7 @@ class Tight
 
     /**
      * Creates an instance of Tight Framework.
-     * @param array $config Settings to override the config file
+     * @param array|TightConfig $config Settings to override the config file
      */
     public function __construct($config = []) {
         // Sets the instance
@@ -77,7 +77,6 @@ class Tight
         $this->smarty->compile_dir = $this->config->smarty["compile_dir"];
         $this->smarty->config_dir = $this->config->smarty["config_dir"];
         $this->smarty->cache_dir = $this->config->smarty["cache_dir"];
-        $this->locale = new \Tight\Modules\Localize\Localize($this->config->locale);
     }
 
     /**
@@ -129,6 +128,9 @@ class Tight
      * @return \Tight\Modules\Localize\Localize
      */
     public function getLocale() {
+        if (null == $this->locale) {
+            $this->locale = new \Tight\Modules\Localize\Localize($this->config->locale);
+        }
         return $this->locale;
     }
 
