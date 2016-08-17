@@ -33,8 +33,9 @@ namespace Tight\Mvc;
  */
 abstract class AbstractView
 {
+
     /**
-     * @var \Tight\Tight
+     * @var \Tight\Tight Tight App
      */
     private $app;
 
@@ -72,13 +73,15 @@ abstract class AbstractView
     public function assign($tpl_var, $value = null, $nocache = false) {
         $this->smarty->assign($tpl_var, $value, $nocache);
     }
+
     /**
-     * 
+     * Gets the Tight App
      * @return \Tight\Tight
      */
-    public function getApp(){
+    public function getApp() {
         return $this->app;
     }
+
     /**
      * Event fired before rendering the template
      */

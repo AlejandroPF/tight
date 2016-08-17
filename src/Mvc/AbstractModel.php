@@ -33,14 +33,21 @@ namespace Tight\Mvc;
  */
 abstract class AbstractModel
 {
+
+    /**
+     * @var \Tight\Tight Tight App
+     */
     private $app;
+
     /**
      * @var array Variables
      */
     private $vars;
+
     public function __construct() {
         $this->app = \Tight\Tight::getInstance();
     }
+
     /**
      * Sets a variable
      * @param string $key Variable name
@@ -68,7 +75,13 @@ abstract class AbstractModel
     public function getVars() {
         return $this->vars;
     }
-    public function getApp(){
+
+    /**
+     * Gets the Tight App
+     * @return \Tight\Tight
+     */
+    public function getApp() {
         return $this->app;
     }
+
 }

@@ -27,7 +27,7 @@
 namespace Tight\Modules;
 
 /**
- * Description of AbstractModule
+ * AbstractModule class for creating Tight Framework modules
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */

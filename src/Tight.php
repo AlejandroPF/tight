@@ -37,7 +37,7 @@ class Tight
     /**
      * Current Version
      */
-    const VERSION = "v1.0.1";
+    const VERSION = "v1.1.0-dev";
 
     private static $INSTANCE = null;
 
@@ -48,21 +48,26 @@ class Tight
     private $config = null;
 
     /**
-     *
-     * @var Tight\Router 
+     * @var Tight\Router Router
      */
     private $router;
-    private $smarty;
+
     /**
-     * @var \Tight\Modules\Localize\Localize
+     * @var \Smarty Smarty templates system
+     */
+    private $smarty;
+
+    /**
+     * @var \Tight\Modules\Localize\Localize Localize module for translations
      */
     private $locale;
-    public static $a = 0;
+
     /**
      * Creates an instance of Tight Framework.
      * @param array $config Settings to override the config file
      */
     public function __construct($config = []) {
+        // Sets the instance
         self::$INSTANCE = $this;
         set_exception_handler([$this, "exceptionHandler"]);
         $this->setConfig($config);
@@ -75,6 +80,10 @@ class Tight
         $this->locale = new \Tight\Modules\Localize\Localize($this->config->locale);
     }
 
+    /**
+     * Gets the class instance
+     * @return \Tight\Tight
+     */
     public static function getInstance() {
         if (null !== self::$INSTANCE) {
             return self::$INSTANCE;
@@ -83,6 +92,13 @@ class Tight
         }
     }
 
+    /**
+     * Sets the configuration
+     * @param array|\Tight\TightConfig $config Configuration object or 
+     * associative array with available options
+     * @throws \InvalidArgumentException If $config is not an array or an 
+     * instance of \Tight\TightConfig class
+     */
     public function setConfig($config) {
         if (is_array($config)) {
             $config = new \Tight\TightConfig($config);
@@ -92,17 +108,22 @@ class Tight
         $this->config = $config;
     }
 
+    /**
+     * Gets the configuration
+     * @return \Tight\TightConfig
+     */
     public function getConfig() {
         return $this->config;
     }
 
     /**
-     * 
+     * Gets the Smarty
      * @return \Smarty
      */
     public function getSmarty() {
         return $this->smarty;
     }
+
     /**
      * Gets locale
      * @return \Tight\Modules\Localize\Localize
@@ -111,6 +132,10 @@ class Tight
         return $this->locale;
     }
 
+    /**
+     * Custom exception handler
+     * @param \Exception $ex Exception
+     */
     public function exceptionHandler($ex) {
         self::printException($ex);
     }
@@ -171,7 +196,7 @@ EXC;
     }
 
     /**
-     * 
+     * Gets the router
      * @return \Tight\Router
      */
     public function getRouter() {

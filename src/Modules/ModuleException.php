@@ -27,7 +27,7 @@
 namespace Tight\Modules;
 
 /**
- * Description of ModuleException
+ * ModuleException class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */

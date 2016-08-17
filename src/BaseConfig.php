@@ -27,7 +27,7 @@
 namespace Tight;
 
 /**
- * Description of AbstractConfig
+ * BaseConfig class
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */

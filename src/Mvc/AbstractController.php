@@ -36,6 +36,9 @@ namespace Tight\Mvc;
 abstract class AbstractController
 {
 
+    /**
+     * @var \Tight\Tight Tight App
+     */
     private $app;
 
     /**
@@ -54,9 +57,15 @@ abstract class AbstractController
         $this->setModel($model);
         $this->onLoad();
     }
-    public function getApp(){
+
+    /**
+     * Gets the Tight App
+     * @return \Tight\Tight
+     */
+    public function getApp() {
         return $this->app;
     }
+
     /**
      * Gets the view
      * @return \Tight\Mvc\AbstractView
