@@ -43,12 +43,12 @@ class Tight
 
     /**
      *
-     * @var Tight\TightConfig Configuration
+     * @var \Tight\TightConfig Configuration
      */
     private $config = null;
 
     /**
-     * @var Tight\Router Router
+     * @var \Tight\Router Router
      */
     private $router;
 

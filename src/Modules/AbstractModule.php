@@ -40,7 +40,8 @@ class AbstractModule
     private $appConfig;
 
     public function __construct() {
-        $this->appConfig = \Tight\Tight::getInstance()->getConfig();
+        $app = \Tight\Tight::getInstance();
+        $this->appConfig = $app->getConfig();
     }
 
     /**
