@@ -48,17 +48,6 @@ class TightConfig extends BaseConfig
         "config_dir" => "./configs/",
         "cache_dir" => "./cache/"
     ];
-
-    /**
-     * @var array Router settings
-     */
-    public $router = [
-        "mvc" => [
-            "enable" => false,
-            "index" => "Root",
-        ]
-    ];
-
     /**
      * @var array MVC settings
      */
