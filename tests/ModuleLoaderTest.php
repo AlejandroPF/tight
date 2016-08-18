@@ -70,11 +70,11 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @depends testModuleLoaderAdd
-     * @expectedException \Tight\Modules\ModuleException
+     * @expectedException \Tight\Exception\ModuleException
      */
     public function testModuleLoaderAddWithException() {
         $this->loader->add($this->testModule);
-        $this->setExpectedException("\Tight\Modules\ModuleException");
+        $this->setExpectedException("\Tight\Exception\ModuleException");
         $this->loader->add($this->testModule);
     }
 

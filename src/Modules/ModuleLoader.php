@@ -55,14 +55,14 @@ class ModuleLoader
     /**
      * Adds a new module
      * @param \Tight\Modules\AbstractModule $module Module
-     * @throws \Tight\Modules\ModuleException If the module is already added
+     * @throws \Tight\Exception\ModuleException If the module is already added
      */
     public function add(\Tight\Modules\AbstractModule $module) {
         if (!isset($this->modules[$module->getModuleName()])) {
             $this->modules[$module->getModuleName()] = $module;
             $module->onLoad();
         } else {
-            throw new \Tight\Modules\ModuleException("Module <strong>" . $module->getModuleName() . "</strong> already exists");
+            throw new \Tight\Exception\ModuleException("Module <strong>" . $module->getModuleName() . "</strong> already exists");
         }
     }
 

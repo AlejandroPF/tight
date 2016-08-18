@@ -96,19 +96,19 @@ class Localize extends \Tight\Modules\AbstractModule
 
     /**
      * Checks the dependences for the class
-     * @throws \Tight\Modules\ModuleException If resource directory cant be 
+     * @throws \Tight\Exception\ModuleException If resource directory cant be 
      * found
      */
     private function checkDependences() {
         if (!is_dir($this->getConfig()->resourceFolder)) {
-            throw new \Tight\Modules\ModuleException("Resource directory not found");
+            throw new \Tight\Exception\ModuleException("Resource directory not found");
         }
     }
 
     /**
      * Sets a new locale
      * @param string $locale New defined locale
-     * @throws \Tight\Modules\ModuleException If resource default resource file
+     * @throws \Tight\Exception\ModuleException If resource default resource file
      * cant be found
      */
     public function setLocale($locale) {
@@ -124,7 +124,7 @@ class Localize extends \Tight\Modules\AbstractModule
             if (is_file($file)) {
                 $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
             } else {
-                throw new \Tight\Modules\ModuleException("Resource file <strong>" . $file . "</strong> not found");
+                throw new \Tight\Exception\ModuleException("Resource file <strong>" . $file . "</strong> not found");
             }
         }
     }

@@ -91,24 +91,24 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Tight\Modules\ModuleException
+     * @expectedException \Tight\Exception\ModuleException
      */
     public function testLocalizeModuleExceptionDirectoryNotFound() {
         $config = ["resourceFolder" => "directoryNotFound"];
-        $this->setExpectedException("\Tight\Modules\ModuleException");
+        $this->setExpectedException("\Tight\Exception\ModuleException");
         new \Tight\Modules\Localize\Localize($config);
     }
 
     /**
      * @test
-     * @expectedException \Tight\Modules\ModuleException
+     * @expectedException \Tight\Exception\ModuleException
      */
     public function testLocalizeModuleExceptionInvalidLocale() {
         $config = [
             "resourceFolder" => self::$resourceFolder,
             "resourceFileName" => "strings"
         ];
-        $this->setExpectedException("\Tight\Modules\ModuleException");
+        $this->setExpectedException("\Tight\Exception\ModuleException");
         new \Tight\Modules\Localize\Localize($config);
     }
 
