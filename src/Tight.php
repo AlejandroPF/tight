@@ -58,9 +58,9 @@ class Tight
     private $smarty;
 
     /**
-     * @var \Tight\Modules\Localize\Localize Localize module for translations
+     * @var \Tight\Modules\ModuleLoader Module loader
      */
-    private $locale;
+    private $moduleLoader;
 
     /**
      * Creates an instance of Tight Framework.
@@ -77,6 +77,7 @@ class Tight
         $this->smarty->compile_dir = $this->config->smarty["compile_dir"];
         $this->smarty->config_dir = $this->config->smarty["config_dir"];
         $this->smarty->cache_dir = $this->config->smarty["cache_dir"];
+        $this->moduleLoader = new \Tight\Modules\ModuleLoader($this);
     }
 
     /**
@@ -215,6 +216,36 @@ EXC;
         } else {
             $this->router->run();
         }
+    }
+
+    public function getModuleLoader() {
+        return $this->moduleLoader;
+    }
+
+    public function moduleAdd(\Tight\Modules\AbstractModule $module) {
+        $this->moduleLoader->add($module);
+    }
+
+    public function moduleRemove($moduleName) {
+        return $this->moduleLoader->remove($moduleName);
+    }
+
+    /**
+     * Gets all the modules added
+     * @return array Modules
+     */
+    public function getModules() {
+        return $this->moduleLoader->getModules();
+    }
+
+    /**
+     * Gets a single module
+     * @param string $moduleName Module name
+     * @return \Tight\Module\AbstractModule Module or null if the module name 
+     * cant be found
+     */
+    public function getModule($moduleName) {
+        $this->moduleLoader->getModule($moduleName);
     }
 
 }
