@@ -287,11 +287,11 @@ class Router
             $directoryNotFound = true;
         }
         if ($directoryNotFound) {
-            $err = !is_dir($controllerDir) ? "Controller directory cant be found" : !is_dir($modelDir) ? "Model directory cant be found" : "View directory cant be found";
-            throw new \InvalidArgumentException($err);
-        } else if ($fileNotFound !== false) {
+            $err = !is_dir($controllerDir) ? "Controller directory not found" : !is_dir($modelDir) ? "Model directory not found" : "View directory not found";
+            throw new \Tight\Exception\NotFoundException($err);
+        } else if ($fileNotFound !== false) {           
             $err = "File <strong>" . $fileNotFound . "</strong> not found";
-            throw new \InvalidArgumentException($err);
+            throw new \Tight\Exception\NotFoundException($err);
         }
     }
 
@@ -326,14 +326,14 @@ class Router
                 if (method_exists($controller, $method)) {
                     call_user_method_array($method, $controller, $args);
                 } else {
-                    throw new \Tight\Exception\FileNotFoundException("Method <strong>" . $method . "</strong> not defined for <strong>" . $contName . "</strong> class");
+                    throw new \Tight\Exception\RouterException("Method <strong>" . $method . "</strong> not defined for <strong>" . $contName . "</strong> class");
                 }
             }
             $controller->render();
-        } catch (\InvalidArgumentException $ex) {
-            $this->dispatchNotFound();
+        } catch (\Tight\Exception\NotFoundException $ex) {
+            echo $this->dispatchNotFound();
         } catch (\SmartyException $ex) {
-            $this->dispatchNotFound();
+            echo $this->dispatchNotFound();
         } catch (\Exception $ex) {
             \Tight\Tight::printException($ex);
         }
