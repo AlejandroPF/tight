@@ -40,6 +40,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      * @covers Tight\Router::__construct
      */
     public function setUp() {
+        $dirs = ["models","views","controllers"];
+        $size = count($dirs);
+        for ($index = 0; $index < $size; $index++) {
+            if(!is_dir($dirs[$index])){
+                mkdir($dirs[$index]);
+            }
+        }
         $this->router = new \Tight\Router("/");
         $this->router->get("/hello/", function() {
             return "Hello";
@@ -172,16 +179,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRouterGetRequestUrn() {
         $this->assertEquals($_SERVER['REQUEST_URI'], $this->router->getRequestUrn());
-    }
-
-    /**
-     * @test
-     * @covers \Tight\Router::runMvc
-     * @covers \Tight\Router::registerClasses
-     */
-    public function testRouterMvc() {
-        $this->router->runMvc();
-        $this->expectOutputString("");
     }
 
 }

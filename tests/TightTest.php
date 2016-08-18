@@ -38,19 +38,30 @@ class TightTest extends \PHPUnit_Framework_TestCase
     public $config = [
         "basePath" => "",
     ];
+    private $directories = ["res", "controllers", "models", "views"];
 
     /**
      * @covers \Tight\TightConfig::__construct
      * @covers \Tight\TightConfig::parseConfig
      */
     public function setUp() {
-        mkdir("res");
+        $size = count($this->directories);
+        for ($index = 0; $index < $size; $index++) {
+            if (!is_dir($this->directories[$index])) {
+                mkdir($this->directories[$index]);
+            }
+        }
         $config = new \Tight\TightConfig($this->config);
         $this->app = new \Tight\Tight($config);
     }
 
     public function tearDown() {
-        rmdir("res");
+        $size = count($this->directories);
+        for ($index = 0; $index < $size; $index++) {
+            if (is_dir($this->directories[$index])) {
+                rmdir($this->directories[$index]);
+            }
+        }
     }
 
     /**
