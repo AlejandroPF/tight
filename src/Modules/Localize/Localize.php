@@ -35,11 +35,6 @@ class Localize extends \Tight\Modules\AbstractModule
 {
 
     /**
-     * @var \Tight\Modules\Localize\LocalizeConfig Class configuration
-     */
-    private $config;
-
-    /**
      * @var string Resource file type
      */
     private $resourceFileType;
@@ -69,9 +64,9 @@ class Localize extends \Tight\Modules\AbstractModule
         }
         parent::__construct();
         $this->setConfig($config);
-        $this->setResourceFileType($this->config->resourceFileType);
+        $this->setResourceFileType($this->getConfig()->resourceFileType);
         $this->checkDependences();
-        $this->setLocale($this->config->defaultLocale);
+        $this->setLocale($this->getConfig()->defaultLocale);
     }
 
     /**
@@ -96,7 +91,7 @@ class Localize extends \Tight\Modules\AbstractModule
      * Reloads the class with the new locale
      */
     public function reloadConfig() {
-        $this->locale = $this->config->defaultLocale;
+        $this->locale = $this->getConfig()->defaultLocale;
     }
 
     /**
@@ -105,7 +100,7 @@ class Localize extends \Tight\Modules\AbstractModule
      * found
      */
     private function checkDependences() {
-        if (!is_dir($this->config->resourceFolder)) {
+        if (!is_dir($this->getConfig()->resourceFolder)) {
             throw new \Tight\Modules\ModuleException("Resource directory not found");
         }
     }
@@ -115,7 +110,7 @@ class Localize extends \Tight\Modules\AbstractModule
      * @param \Tight\Modules\Localize\LocalizeConfig $config Class configuration
      */
     public function setConfig(LocalizeConfig $config) {
-        $this->config = $config;
+        parent::setConfig($config);
         $this->reloadConfig();
     }
 
@@ -127,13 +122,13 @@ class Localize extends \Tight\Modules\AbstractModule
      */
     public function setLocale($locale) {
         $this->locale = $locale;
-        $folder = \Tight\Utils::addTrailingSlash($this->config->resourceFolder);
-        $fileName = $this->config->resourceFileName . $this->config->langSeparator . $locale . "." . $this->config->resourceFileType;
+        $folder = \Tight\Utils::addTrailingSlash($this->getConfig()->resourceFolder);
+        $fileName = $this->getConfig()->resourceFileName . $this->getConfig()->langSeparator . $locale . "." . $this->getConfig()->resourceFileType;
         $file = $folder . $fileName;
         if (is_file($file)) {
             $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
         } else {
-            $fileName = $this->config->resourceFileName . "." . $this->config->resourceFileType;
+            $fileName = $this->getConfig()->resourceFileName . "." . $this->getConfig()->resourceFileType;
             $file = $folder . $fileName;
             if (is_file($file)) {
                 $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
@@ -144,21 +139,13 @@ class Localize extends \Tight\Modules\AbstractModule
     }
 
     /**
-     * Gets the module configuration
-     * @return \Tight\Modules\Localize\LocalizeConfig Class configuration
-     */
-    public function getConfig() {
-        return $this->config;
-    }
-
-    /**
      * Gets the available locales
      * @return array Available locales
      */
     public function getLocales() {
         $output = [];
-        $directory = $this->config->resourceFolder;
-        $fileName = $this->config->resourceFileName;
+        $directory = $this->getConfig()->resourceFolder;
+        $fileName = $this->getConfig()->resourceFileName;
         $dir = opendir($directory);
         $files = [];
         while ($entry = readdir($dir)) {
@@ -170,13 +157,13 @@ class Localize extends \Tight\Modules\AbstractModule
             $file = \Tight\Utils::getSlicedFile($directory . $element);
             //Removes extension
             $name = $file["name"];
-            $explode = explode($this->config->langSeparator, $name);
+            $explode = explode($this->getConfig()->langSeparator, $name);
             // Get the locale of the defined file type
-            if ($file["ext"] == $this->config->resourceFileType) {
+            if ($file["ext"] == $this->getConfig()->resourceFileType) {
                 if (count($explode) > 1) {
                     $output[] = $explode[count($explode) - 1];
                 } else {
-                    $output[] = $this->config->defaultLocale;
+                    $output[] = $this->getConfig()->defaultLocale;
                 }
             }
         }

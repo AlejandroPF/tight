@@ -39,11 +39,23 @@ class AbstractModule
      */
     private $appConfig;
 
+    /**
+     * @var \Tight\BaseConfig Module configuration
+     */
+    private $moduleConfig;
+
     public function __construct() {
         $app = \Tight\Tight::getInstance();
         $this->appConfig = $app->getConfig();
     }
 
+    public function setConfig($conf) {
+        $this->moduleConfig = $conf;
+        return $this;
+    }
+    public function getConfig(){
+        return $this->moduleConfig;
+    }
     /**
      * Gets the application configuration
      * @return \Tight\TightConfig
