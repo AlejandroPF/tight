@@ -43,10 +43,10 @@ class TightConfig extends BaseConfig
      * @var array Smarty settings
      */
     public $smarty = [
-        "template_dir" => "./templates",
-        "compile_dir" => "./templates_c",
-        "config_dir" => "./configs",
-        "cache_dir" => "./cache"
+        "template_dir" => "./templates/",
+        "compile_dir" => "./templates_c/",
+        "config_dir" => "./configs/",
+        "cache_dir" => "./cache/"
     ];
 
     /**
