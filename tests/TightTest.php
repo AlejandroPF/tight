@@ -36,19 +36,46 @@ class TightTest extends \PHPUnit_Framework_TestCase
 
     public $app;
     public $config = [
-        "basePath" => "",
+        "basePath" => __DIR__,
+        "smarty" => [
+            "template_dir" => "./templates",
+            "compile_dir" => "./templates_c",
+            "config_dir" => "./configs",
+            "cache_dir" => "./cache"
+        ],
+        "router" => [
+            "mvc" => [
+                "enable" => false,
+                "index" => "Root",
+            ]
+        ],
+        "mvc" => [
+            "enableRouter" => false,
+            "indexName" => "Root",
+            "controller_dir" => "./controllers/",
+            "model_dir" => "./models/",
+            "view_dir" => "./views/",
+        ],
+        "connection" => [
+            "user" => "root",
+            "password" => "root",
+            "database" => "mysql"
+        ]
     ];
     private $directories = ["res", "controllers", "models", "views"];
+    private $files = ["./res/values.json"];
 
-    /**
-     * @covers \Tight\TightConfig::__construct
-     * @covers \Tight\TightConfig::parseConfig
-     */
     public function setUp() {
-        $size = count($this->directories);
-        for ($index = 0; $index < $size; $index++) {
+        $dirSize = count($this->directories);
+        for ($index = 0; $index < $dirSize; $index++) {
             if (!is_dir($this->directories[$index])) {
                 mkdir($this->directories[$index]);
+            }
+        }
+        $fileSize = count($this->files);
+        for ($index = 0; $index < $fileSize; $index++) {
+            if (!is_file($this->files[$index])) {
+                file_put_contents($this->files[$index], "");
             }
         }
         $config = new \Tight\TightConfig($this->config);
@@ -56,12 +83,31 @@ class TightTest extends \PHPUnit_Framework_TestCase
     }
 
     public function tearDown() {
-        $size = count($this->directories);
-        for ($index = 0; $index < $size; $index++) {
+        $fileSize = count($this->files);
+        $dirSize = count($this->directories);
+        for ($index = 0; $index < $fileSize; $index++) {
+            if (is_file($this->files[$index])) {
+                unlink($this->files[$index]);
+            }
+        }
+        for ($index = 0; $index < $dirSize; $index++) {
             if (is_dir($this->directories[$index])) {
                 rmdir($this->directories[$index]);
             }
         }
+    }
+
+    /**
+     * @test
+     */
+    public function testTightConfig() {
+        $expectedClass = new \Tight\TightConfig($this->config);
+        $app = new \Tight\Tight($this->config);
+        $this->assertEquals($expectedClass, $app->getConfig());
+        unset($app);
+        $app = new \Tight\Tight;
+        $app->setConfig($this->config);
+        $this->assertEquals($expectedClass,$app->getConfig());
     }
 
     /**
@@ -71,6 +117,25 @@ class TightTest extends \PHPUnit_Framework_TestCase
     public function testTightGetRouter() {
         $router = $this->app->getRouter();
         $this->assertEquals(new \Tight\Router($this->config["basePath"]), $router);
+    }
+
+    /**
+     * @test
+     */
+    public function testTightGetSmarty() {
+        $expected = new \Smarty;
+        $this->assertEquals($expected->template_dir, $this->app->getSmarty()->template_dir);
+        $this->assertEquals($expected->compile_dir, $this->app->getSmarty()->compile_dir);
+        $this->assertEquals($expected->cache_dir, $this->app->getSmarty()->cache_dir);
+        $this->assertEquals($expected->config_dir, $this->app->getSmarty()->config_dir);
+    }
+
+    /**
+     * @test
+     */
+    public function testTightGetLocale() {
+        $expected = new \Tight\Modules\Localize\Localize;
+        $this->assertEquals($expected, $this->app->getLocale());
     }
 
 }
