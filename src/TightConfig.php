@@ -74,10 +74,6 @@ class TightConfig extends BaseConfig
             $this->smarty = array_replace_recursive($this->smarty, $config["smarty"]);
             unset($config["smarty"]);
         }
-        if (isset($config["router"])) {
-            $this->router = array_replace_recursive($this->router, $config["router"]);
-            unset($config['router']);
-        }
         if (isset($config["mvc"])) {
             $this->mvc = array_replace_recursive($this->mvc, $config["mvc"]);
             unset($config["mvc"]);
