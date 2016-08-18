@@ -122,17 +122,6 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     */
-    public function testLocalizeModuleGetAppConfig() {
-        // The locale section in Tight\TightConfig is empty due to the method
-        // of instantiating the module class (calling the class instead of 
-        // Tight\Tight)
-        $config = new \Tight\TightConfig(["locale" => []]);
-        $this->assertEquals($config, $this->module->getAppConfig());
-    }
-
-    /**
-     * @test
      * @expectedException \InvalidArgumentException
      */
     public function testLocalizeModuleInvalidArgumentException() {

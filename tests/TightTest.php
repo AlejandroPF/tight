@@ -43,12 +43,6 @@ class TightTest extends \PHPUnit_Framework_TestCase
             "config_dir" => "./configs",
             "cache_dir" => "./cache"
         ],
-        "router" => [
-            "mvc" => [
-                "enable" => false,
-                "index" => "Root",
-            ]
-        ],
         "mvc" => [
             "enableRouter" => false,
             "indexName" => "Root",
@@ -128,14 +122,6 @@ class TightTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected->compile_dir, $this->app->getSmarty()->compile_dir);
         $this->assertEquals($expected->cache_dir, $this->app->getSmarty()->cache_dir);
         $this->assertEquals($expected->config_dir, $this->app->getSmarty()->config_dir);
-    }
-
-    /**
-     * @test
-     */
-    public function testTightGetLocale() {
-        $expected = new \Tight\Modules\Localize\Localize;
-        $this->assertEquals($expected, $this->app->getLocale());
     }
 
 }
