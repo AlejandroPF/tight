@@ -330,7 +330,7 @@ class Router
                 }
             }
             $controller->render();
-        } catch (\Tight\Exception\FileNotFoundException $ex) {
+        } catch (\InvalidArgumentException $ex) {
             $this->dispatchNotFound();
         } catch (\SmartyException $ex) {
             $this->dispatchNotFound();
