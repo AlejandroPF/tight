@@ -106,15 +106,6 @@ class Localize extends \Tight\Modules\AbstractModule
     }
 
     /**
-     * Sets the class configuration
-     * @param \Tight\Modules\Localize\LocalizeConfig $config Class configuration
-     */
-    public function setConfig($config) {
-        parent::setConfig($config);
-        $this->reloadConfig();
-    }
-
-    /**
      * Sets a new locale
      * @param string $locale New defined locale
      * @throws \Tight\Modules\ModuleException If resource default resource file
@@ -182,6 +173,18 @@ class Localize extends \Tight\Modules\AbstractModule
         } else {
             return "";
         }
+    }
+
+    public function onConfigChange() {
+        $this->reloadConfig();
+    }
+
+    public function onLoad() {
+        
+    }
+
+    public function onRemove() {
+        
     }
 
 }

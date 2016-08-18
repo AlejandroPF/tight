@@ -31,7 +31,7 @@ namespace Tight\Modules;
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
-class AbstractModule
+abstract class AbstractModule
 {
 
     private $moduleName;
@@ -67,6 +67,7 @@ class AbstractModule
      */
     public function setConfig(\Tight\BaseConfig $conf) {
         $this->moduleConfig = $conf;
+        $this->onConfigChange();
         return $this;
     }
 
@@ -86,4 +87,9 @@ class AbstractModule
         return $this->appConfig;
     }
 
+    abstract public function onConfigChange();
+
+    abstract public function onLoad();
+
+    abstract public function onRemove();
 }
