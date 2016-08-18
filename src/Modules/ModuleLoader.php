@@ -60,6 +60,7 @@ class ModuleLoader
     public function add(\Tight\Modules\AbstractModule $module) {
         if (!isset($this->modules[$module->getModuleName()])) {
             $this->modules[$module->getModuleName()] = $module;
+            $module->onLoad();
         } else {
             throw new \Tight\Modules\ModuleException("Module <strong>" . $module->getModuleName() . "</strong> already exists");
         }
@@ -72,6 +73,7 @@ class ModuleLoader
      */
     public function remove($moduleName) {
         if (isset($this->modules[$moduleName])) {
+            $this->modules[$moduleName]->onRemove();
             unset($this->modules[$moduleName]);
             return true;
         } else {
