@@ -34,6 +34,8 @@ namespace Tight\Modules;
 class AbstractModule
 {
 
+    private $moduleName;
+
     /**
      * @var \Tight\TightConfig Application settings
      */
@@ -44,21 +46,41 @@ class AbstractModule
      */
     private $moduleConfig;
 
-    public function __construct() {
+    public function __construct($name) {
+        $this->moduleName = $name;
         $app = \Tight\Tight::getInstance();
         $this->appConfig = $app->getConfig();
     }
 
-    public function setConfig($conf) {
+    /**
+     * Gets the module name
+     * @return string Module name
+     */
+    public function getModuleName() {
+        return $this->moduleName;
+    }
+
+    /**
+     * Sets the module configuration
+     * @param \Tight\BaseConfig $conf Configuration
+     * @return \Tight\Modules\AbstractModule Fluent setter
+     */
+    public function setConfig(\Tight\BaseConfig $conf) {
         $this->moduleConfig = $conf;
         return $this;
     }
-    public function getConfig(){
+
+    /**
+     * Gets the module configuration
+     * @return \Tight\BaseConfig Config
+     */
+    public function getConfig() {
         return $this->moduleConfig;
     }
+
     /**
      * Gets the application configuration
-     * @return \Tight\TightConfig
+     * @return \Tight\TightConfig Tight app config
      */
     public function getAppConfig() {
         return $this->appConfig;

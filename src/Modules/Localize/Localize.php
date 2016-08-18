@@ -62,7 +62,7 @@ class Localize extends \Tight\Modules\AbstractModule
         } else if (!$config instanceof \Tight\Modules\Localize\LocalizeConfig) {
             throw new \InvalidArgumentException("Argument 1 passed to " . get_class($this) . " must be an array or an instance of Tight\Modules\Localize\LocalizeConfig");
         }
-        parent::__construct();
+        parent::__construct("LocalizeModule");
         $this->setConfig($config);
         $this->setResourceFileType($this->getConfig()->resourceFileType);
         $this->checkDependences();
