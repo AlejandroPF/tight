@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-namespace Tight\Modules;
+namespace Tight\Exception;
 
 /**
  * ModuleException class
