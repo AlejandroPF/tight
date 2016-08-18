@@ -125,17 +125,6 @@ class Tight
     }
 
     /**
-     * Gets locale
-     * @return \Tight\Modules\Localize\Localize
-     */
-    public function getLocale() {
-        if (null == $this->locale) {
-            $this->locale = new \Tight\Modules\Localize\Localize($this->config->locale);
-        }
-        return $this->locale;
-    }
-
-    /**
      * Custom exception handler
      * @param \Exception $exception Exception
      */
@@ -245,7 +234,7 @@ EXC;
      * cant be found
      */
     public function getModule($moduleName) {
-        $this->moduleLoader->getModule($moduleName);
+        return $this->moduleLoader->getModule($moduleName);
     }
 
 }
