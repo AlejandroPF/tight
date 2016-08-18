@@ -109,7 +109,7 @@ class Localize extends \Tight\Modules\AbstractModule
      * Sets the class configuration
      * @param \Tight\Modules\Localize\LocalizeConfig $config Class configuration
      */
-    public function setConfig(LocalizeConfig $config) {
+    public function setConfig($config) {
         parent::setConfig($config);
         $this->reloadConfig();
     }
