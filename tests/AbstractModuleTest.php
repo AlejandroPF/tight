@@ -23,7 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 namespace Tight\Tests;
+
 /**
  * Description of AbstractModuleTest
  *
@@ -31,20 +33,40 @@ namespace Tight\Tests;
  */
 class AbstractModuleTest extends \PHPUnit_Framework_TestCase
 {
+
     private $name = "TestModule";
     private $module;
+
     public function setUp() {
-        $this->module = new \Tight\Modules\AbstractModule($this->name);
+        $this->module = new TestModule($this->name);
     }
 
     public function tearDown() {
         
     }
+
     /**
      * @test
      */
-    public function testAbstractModuleGetName(){
+    public function testAbstractModuleGetName() {
         $this->assertEquals($this->name, $this->module->getModuleName());
+    }
+
+}
+
+class TestModule extends \Tight\Modules\AbstractModule
+{
+
+    public function onConfigChange() {
+        
+    }
+
+    public function onLoad() {
+        
+    }
+
+    public function onRemove() {
+        
     }
 
 }

@@ -40,7 +40,7 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp() {
 
         $this->loader = new \Tight\Modules\ModuleLoader(new \Tight\Tight);
-        $this->testModule = new \Tight\Modules\AbstractModule("TestModule");
+        $this->testModule = new TestLoaderModule("TestModule");
     }
 
     public function tearDown() {
@@ -88,13 +88,32 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $expected = $this->testModule;
         $this->assertEquals($expected, $this->loader->getModule($modName));
     }
+
     /**
      * @test
      * @depends testModuleLoaderAdd
      */
-    public function testModuleLoaderRemove(){
+    public function testModuleLoaderRemove() {
         $this->loader->add($this->testModule);
         $this->assertTrue($this->loader->remove($this->testModule->getModuleName()));
         $this->assertFalse($this->loader->remove($this->testModule->getModuleName()));
     }
+
+}
+
+class TestLoaderModule extends \Tight\Modules\AbstractModule
+{
+
+    public function onConfigChange() {
+        
+    }
+
+    public function onLoad() {
+        
+    }
+
+    public function onRemove() {
+        
+    }
+
 }
