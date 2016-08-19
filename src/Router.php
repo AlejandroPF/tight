@@ -287,7 +287,7 @@ class Router
             $directoryNotFound = true;
         }
         if ($directoryNotFound) {
-            $err = !is_dir($controllerDir) ? "Controller directory not found" : !is_dir($modelDir) ? "Model directory not found" : "View directory not found";
+            $err = !is_dir($controllerDir) ? "Controller directory not found" : (!is_dir($modelDir) ? "Model directory not found" : "View directory not found");
             throw new \Tight\Exception\NotFoundException($err);
         } else if ($fileNotFound !== false) {
             $err = "File <strong>" . $fileNotFound . "</strong> not found";
