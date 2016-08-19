@@ -288,7 +288,7 @@ class Router
         }
         if ($directoryNotFound) {
             $err = !is_dir($controllerDir) ? "Controller directory not found" : (!is_dir($modelDir) ? "Model directory not found" : "View directory not found");
-            throw new \Tight\Exception\NotFoundException($err);
+            throw new \Tight\Exception\RouterException($err);
         } else if ($fileNotFound !== false) {
             $err = "File <strong>" . $fileNotFound . "</strong> not found";
             throw new \Tight\Exception\NotFoundException($err);
@@ -331,7 +331,7 @@ class Router
             }
             $controller->render();
         } catch (\Tight\Exception\NotFoundException $ex) {
-            \Tight\Tight::printException($ex);
+            echo $this->dispatchNotFound();
         } catch (\SmartyException $ex) {
             echo $this->dispatchNotFound();
         } catch (\Exception $ex) {
