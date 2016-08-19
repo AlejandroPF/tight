@@ -45,7 +45,7 @@ namespace Tight;
  * Eg.
  * <pre>
  * $router->get("/",'userDefinedFunction',function(){
- *      echo "Hello World!";
+ *      return "Hello World!";
  * });
  * </pre>
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
