@@ -37,7 +37,7 @@ class Tight
     /**
      * Current Version
      */
-    const VERSION = "v1.1.0-dev";
+    const VERSION = "v1.1.0";
 
     private static $INSTANCE = null;
 
