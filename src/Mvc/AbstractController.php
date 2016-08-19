@@ -101,12 +101,14 @@ abstract class AbstractController
         $this->model = $model;
         return $this;
     }
+
     /**
      * Event fired when the controller is instanciated 
      */
     abstract public function onLoad();
 
     abstract public function parseActions();
+
     /**
      * Event fired before rendering the view
      */
@@ -128,8 +130,10 @@ abstract class AbstractController
         // Fire \Tight\Mvc\AbstractController::onRender event
         $this->onRender();
         $variables = $this->model->getVars();
-        foreach ($variables as $key => $value) {
-            $this->view->assign($key, $value);
+        if (count($variables) > 0) {
+            foreach ($variables as $key => $value) {
+                $this->view->assign($key, $value);
+            }
         }
         $this->view->render();
         // Fires \Tight\Mvc\AbstractController::onFinish event
