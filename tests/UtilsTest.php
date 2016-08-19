@@ -106,5 +106,13 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($expected, \Tight\Utils::getSlicedFile(__FILE__));
     }
-
+    /**
+     * @test
+     */
+    public function testUtilsStartsWith(){
+        $string = "abcd";
+        $this->assertTrue(Utils::startsWith("abcd", "abc"));
+        $this->assertFalse(Utils::startsWith("abcd", "cd"));
+        $this->assertFalse(Utils::startsWith("abcd", "efg"));
+    }
 }

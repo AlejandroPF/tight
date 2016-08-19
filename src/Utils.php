@@ -126,4 +126,7 @@ class Utils
         return $output;
     }
 
+    public static function startsWith($string, $substring) {
+        return (strpos($string, $substring) === 0);
+    }
 }
