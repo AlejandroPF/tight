@@ -34,4 +34,7 @@ $router->run();
 
 ## Documentation
 
-For more info you can read the [Router Documentation](docs/router.md)
+For more info you can read:
+- [Router Documentation](docs/router.md)
+- [Config Documentation](docs/config.md)
+- [MVC Documentation](docs/mvc.md)

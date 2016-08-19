@@ -44,13 +44,13 @@ You can create routes in several ways depending on the http method.
 require_once 'vendor/autoload.php';
 $router = new Tight\Router(__DIR__);
 $router->get("/",function(){
-    echo "Get method for '/' pattern";
+    return "Get method for '/' pattern";
 });
 $router->post("/",function(){
-    echo "Post method for '/' pattern";
+    return "Post method for '/' pattern";
 });
 $router->map(['get','post'],"/hello/:world",function($arg){
-    echo "Get and post method for '/hello/:world' pattern";
+    return "Get and post method for '/hello/:world' pattern";
 });
 $app->run(); //or $router->run()
 ```
@@ -64,10 +64,10 @@ For adding a custom not found handler you must call the function `Tight\Router::
 require_once 'vendor/autoload.php';
 $router = new Tight\Router(__DIR__);
 $router->get("/",function(){
-    echo "Get method for '/' pattern";
+    return "Get method for '/' pattern";
 });
 $router->notFound(function(){
-    echo "404: Page not found!";
+    return "404: Page not found!";
 });
 $app->run(); //or $router->run()
 ```
