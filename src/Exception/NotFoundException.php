@@ -27,7 +27,7 @@
 namespace Tight\Exception;
 
 /**
- * Description of FileNotFoundException
+ * Description of NotFoundException
  *
  * @author Alejandro Peña Florentín (alejandropenaflorentin@gmail.com)
  */
