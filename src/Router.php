@@ -298,7 +298,7 @@ class Router
     public function runMvc() {
         try {
             $requestUrn = $this->getRequestUrn();
-            spl_autoload_register(array($this, "registerClasses"), TRUE, TRUE);
+            spl_autoload_register(array($this, "registerClasses"), TRUE);
             $name = "";
             $method = null;
             $args = [];
