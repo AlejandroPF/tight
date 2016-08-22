@@ -40,7 +40,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
         "data" => [
             "name" => "Name",
             "user" => "User",
-            "password" => "Passowrd",
+            "password" => "Password",
         ]
     ];
     private $localeEs = [
@@ -64,29 +64,27 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     private $valuesXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <resources>
     <values lang='en'>
-        <string name='author'>Alejandro Peña Florentín</string>
-        <string name='title'>This is the title</string>
-        <array name='user'>
-            <string name='name'>user name</string>
-            <string name='password'>password</string>
-            <array name='connection'>
-                <string name='user'>user</string>
-                <string name='password'>password</string>
-                <string name='database'>database</string>
-            </array>
+        <string name='app'>Test App</string>
+        <array name='data'>
+            <string name='name'>Name</string>
+            <string name='user'>User</string>
+            <string name='password'>Password</string>
         </array>
     </values>
     <values lang='es'>
-        <string name='author'>Alejandro Peña Florentín</string>
-        <string name='title'>Esto es el título</string>
-        <array name='user'>
-            <string name='name'>nombre de usuario</string>
-            <string name='password'>contraseña</string>
-            <array name='connection'>
-                <string name='user'>usuario</string>
-                <string name='password'>contraseña</string>
-                <string name='database'>base de datos</string>
-            </array>
+        <string name='app'>Test de aplicación</string>
+        <array name='data'>
+            <string name='name'>Nombre</string>
+            <string name='user'>Usuario</string>
+            <string name='password'>Contraseña</string>
+        </array>
+    </values>
+    <values lang='fr'>
+        <string name='app'>Test d'application</string>
+        <array name='data'>
+            <string name='name'>Nom</string>
+            <string name='user'>Utilisateur</string>
+            <string name='password'>Mot de passe</string>
         </array>
     </values>
 </resources>";
@@ -119,7 +117,17 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     }
 
     public function tearDown() {
-        
+        $valuesFile_en = self::$resourceFolder . "/values.json";
+        $valuesFile_es = self::$resourceFolder . "/values_es.json";
+        $valuesFile_fr = self::$resourceFolder . "/values_fr.json";
+        $valuesXml = self::$resourceFolder . "/values.xml";
+        $files = [$valuesFile_en, $valuesFile_es, $valuesFile_fr, $valuesXml];
+        $size = count($files);
+        for ($index = 0; $index < $size; $index++) {
+            if (is_file($files[$index])) {
+                unlink($files[$index]);
+            }
+        }
     }
 
     /**
@@ -173,7 +181,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testLocalizeModuleJsonGetLocales() {
+    public function testJsonGetLocales() {
         $expected = ["en", "es", "fr"];
         $this->assertEquals($expected, $this->module->getLocales());
     }
@@ -191,7 +199,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @depends testLocalizeModuleJsonSetLocale
+     * @depends testJsonSetLocale
      */
     public function testJsonGet() {
         $this->assertEquals($this->localeEn['app'], $this->module->get("app"));
@@ -205,4 +213,22 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
         $this->module->setLocale("en");
         $this->assertEmpty($this->module->get("keyNotDefined"));
     }
+
+    /**
+     * @test
+     */
+    public function testSetResourceFileType() {
+        $this->module->setResourceFileType(\Tight\Modules\Localize\LocalizeConfig::FILETYPE_XML);
+        $this->assertEquals(\Tight\Modules\Localize\LocalizeConfig::FILETYPE_XML, $this->module->getResourceFileType());
+    }
+
+    /**
+     * @test
+     * @depends testSetResourceFileType
+     */
+    public function testXmlGetValues() {
+        $this->module->setResourceFileType(\Tight\Modules\Localize\LocalizeConfig::FILETYPE_XML);
+        $this->assertEquals($this->localeEn, $this->module->getValues());
+    }
+
 }
