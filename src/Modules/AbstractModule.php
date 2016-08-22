@@ -34,7 +34,15 @@ namespace Tight\Modules;
 abstract class AbstractModule
 {
 
+    /**
+     * @var string Module name
+     */
     private $moduleName;
+
+    /**
+     * @var string Module version
+     */
+    private $version;
 
     /**
      * @var \Tight\TightConfig Application settings
@@ -46,8 +54,9 @@ abstract class AbstractModule
      */
     private $moduleConfig;
 
-    public function __construct($name) {
+    public function __construct($name,$version = "v1.0") {
         $this->moduleName = $name;
+        $this->version = $version;
         $app = \Tight\Tight::getInstance();
         $this->appConfig = $app->getConfig();
     }
