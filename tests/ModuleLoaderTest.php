@@ -98,7 +98,19 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->loader->remove($this->testModule->getModuleName()));
         $this->assertFalse($this->loader->remove($this->testModule->getModuleName()));
     }
-
+    /**
+     * @test
+     * @depends testModuleLoaderAdd
+     */
+    public function testModuleLoaderGetModulesInfo(){
+        $expected[0] = [
+            "name" => "TestModule",
+            "version"=> "v1.0"
+        ];
+        $this->assertEquals([],$this->loader->getModulesInfo());
+        $this->loader->add($this->testModule);
+        $this->assertEquals($expected,$this->loader->getModulesInfo());
+    }
 }
 
 class TestLoaderModule extends \Tight\Modules\AbstractModule

@@ -35,10 +35,11 @@ class AbstractModuleTest extends \PHPUnit_Framework_TestCase
 {
 
     private $name = "TestModule";
+    private $version = "v1.5";
     private $module;
 
     public function setUp() {
-        $this->module = new TestModule($this->name);
+        $this->module = new TestModule($this->name, $this->version);
     }
 
     public function tearDown() {
@@ -51,7 +52,18 @@ class AbstractModuleTest extends \PHPUnit_Framework_TestCase
     public function testAbstractModuleGetName() {
         $this->assertEquals($this->name, $this->module->getModuleName());
     }
-
+    /**
+     * @test
+     */
+    public function testAbstractModuleGetVersion(){
+        $this->assertEquals($this->version, $this->module->getModuleVersion());
+    }
+    /**
+     * @test
+     */
+    public function testAbstractModuleGetAppConfig(){
+        $this->assertEquals(\Tight\Tight::getInstance()->getConfig(),$this->module->getAppConfig());
+    }
 }
 
 class TestModule extends \Tight\Modules\AbstractModule
