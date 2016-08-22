@@ -61,12 +61,42 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     ];
     private $config = [
     ];
+    private $valuesXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<resources>
+    <values lang='en'>
+        <string name='author'>Alejandro Peña Florentín</string>
+        <string name='title'>This is the title</string>
+        <array name='user'>
+            <string name='name'>user name</string>
+            <string name='password'>password</string>
+            <array name='connection'>
+                <string name='user'>user</string>
+                <string name='password'>password</string>
+                <string name='database'>database</string>
+            </array>
+        </array>
+    </values>
+    <values lang='es'>
+        <string name='author'>Alejandro Peña Florentín</string>
+        <string name='title'>Esto es el título</string>
+        <array name='user'>
+            <string name='name'>nombre de usuario</string>
+            <string name='password'>contraseña</string>
+            <array name='connection'>
+                <string name='user'>usuario</string>
+                <string name='password'>contraseña</string>
+                <string name='database'>base de datos</string>
+            </array>
+        </array>
+    </values>
+</resources>";
     private $module;
 
     public function setUp() {
         $valuesFile_en = self::$resourceFolder . "/values.json";
         $valuesFile_es = self::$resourceFolder . "/values_es.json";
         $valuesFile_fr = self::$resourceFolder . "/values_fr.json";
+        $valuesXml = self::$resourceFolder . "/values.xml";
         if (!is_dir(self::$resourceFolder)) {
             mkdir(self::$resourceFolder);
         }
@@ -78,6 +108,9 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
         }
         if (!is_file($valuesFile_fr)) {
             file_put_contents($valuesFile_fr, json_encode($this->localeFr));
+        }
+        if (!is_file($valuesXml)) {
+            file_put_contents($valuesXml, $this->valuesXml);
         }
         $this->config = [
             "resourceFolder" => "./" . self::$resourceFolder . "/"
@@ -93,7 +126,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Tight\Exception\ModuleException
      */
-    public function testLocalizeModuleExceptionDirectoryNotFound() {
+    public function testModuleExceptionDirectoryNotFound() {
         $config = ["resourceFolder" => "directoryNotFound"];
         $this->setExpectedException("\Tight\Exception\ModuleException");
         new \Tight\Modules\Localize\Localize($config);
@@ -103,7 +136,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Tight\Exception\ModuleException
      */
-    public function testLocalizeModuleExceptionInvalidLocale() {
+    public function testModuleExceptionInvalidLocale() {
         $config = [
             "resourceFolder" => self::$resourceFolder,
             "resourceFileName" => "strings"
@@ -115,7 +148,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testLocalizeModuleGetConfig() {
+    public function testGetConfig() {
         $config = new \Tight\Modules\Localize\LocalizeConfig($this->config);
         $this->assertEquals($config, $this->module->getConfig());
     }
@@ -124,7 +157,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \InvalidArgumentException
      */
-    public function testLocalizeModuleInvalidArgumentException() {
+    public function testInvalidArgumentException() {
         $this->setExpectedException("\InvalidArgumentException");
         new \Tight\Modules\Localize\Localize("This is a string");
     }
@@ -132,7 +165,7 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testLocalizeModuleGetValues() {
+    public function testJsonGetValues() {
         $expected = $this->localeEn;
         $this->assertEquals($expected, $this->module->getValues());
     }
@@ -140,17 +173,17 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testLocalizeModuleGetLocales() {
+    public function testLocalizeModuleJsonGetLocales() {
         $expected = ["en", "es", "fr"];
         $this->assertEquals($expected, $this->module->getLocales());
     }
 
     /**
      * @test
-     * @depends testLocalizeModuleGetValues
+     * @depends testJsonGetValues
      * @covers \Tight\Modules\Localize\Localize::setLocale
      */
-    public function testLocalizeModuleSetLocale() {
+    public function testJsonSetLocale() {
         $expected = $this->localeEs;
         $this->module->setLocale("es");
         $this->assertEquals($expected, $this->module->getValues());
@@ -158,9 +191,9 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @depends testLocalizeModuleSetLocale
+     * @depends testLocalizeModuleJsonSetLocale
      */
-    public function testLocalizeModuleGet() {
+    public function testJsonGet() {
         $this->assertEquals($this->localeEn['app'], $this->module->get("app"));
         $this->assertEquals($this->localeEn['data']['name'], $this->module->get("data")['name']);
         $this->module->setLocale("es");
@@ -172,5 +205,4 @@ class LocalizeModuleTest extends \PHPUnit_Framework_TestCase
         $this->module->setLocale("en");
         $this->assertEmpty($this->module->get("keyNotDefined"));
     }
-
 }
