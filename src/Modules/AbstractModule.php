@@ -54,11 +54,15 @@ abstract class AbstractModule
      */
     private $moduleConfig;
 
-    public function __construct($name,$version = "v1.0") {
+    public function __construct($name, $version = "v1.0") {
         $this->moduleName = $name;
         $this->version = $version;
         $app = \Tight\Tight::getInstance();
         $this->appConfig = $app->getConfig();
+    }
+
+    public function getModuleVersion() {
+        return $this->version;
     }
 
     /**
