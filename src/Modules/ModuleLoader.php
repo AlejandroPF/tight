@@ -103,4 +103,21 @@ class ModuleLoader
         }
     }
 
+    /**
+     * Gets a module info
+     * @return array Modules info
+     */
+    public function getModulesInfo() {
+        $output = [];
+        $modules = $this->getModules();
+        foreach ($modules as $value) {
+            $mod = [
+                "name" => $value->getModuleName(),
+                "version" => $value->getModuleVersion()
+            ];
+            $output[] = $mod;
+        }
+        return $output;
+    }
+
 }
