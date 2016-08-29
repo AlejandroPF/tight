@@ -62,10 +62,10 @@ class Localize extends \Tight\Modules\AbstractModule
         } else if (!$config instanceof \Tight\Modules\Localize\LocalizeConfig) {
             throw new \InvalidArgumentException("Argument 1 passed to " . get_class($this) . " must be an array or an instance of Tight\Modules\Localize\LocalizeConfig");
         }
-        parent::__construct("LocalizeModule");
+        parent::__construct("LocalizeModule", "v1.2");
         $this->setConfig($config);
-        $this->setResourceFileType($this->getConfig()->resourceFileType);
         $this->checkDependences();
+        $this->setResourceFileType($this->getConfig()->resourceFileType);
         $this->setLocale($this->getConfig()->defaultLocale);
     }
 
@@ -76,7 +76,19 @@ class Localize extends \Tight\Modules\AbstractModule
      */
     public function setResourceFileType($resourceFileType) {
         $this->resourceFileType = $resourceFileType;
+        $this->reloadConfig();
         return $this;
+    }
+
+    /**
+     * Gets the current resource file type
+     * @return string Resource file type
+     * @see \Tight\Modules\Localize\LocalizeConfig::FILETYPE_INI
+     * @see \Tight\Modules\Localize\LocalizeConfig::FILETYPE_JSON
+     * @see \Tight\Modules\Localize\LocalizeConfig::FILETYPE_XML
+     */
+    public function getResourceFileType() {
+        return $this->resourceFileType;
     }
 
     /**
@@ -91,7 +103,19 @@ class Localize extends \Tight\Modules\AbstractModule
      * Reloads the class with the new locale
      */
     public function reloadConfig() {
-        $this->locale = $this->getConfig()->defaultLocale;
+        if (null == $this->locale) {
+            $this->locale = $this->getConfig()->defaultLocale;
+        }
+        $values = null;
+        switch ($this->resourceFileType) {
+            case LocalizeConfig::FILETYPE_JSON:
+                $values = $this->getValuesFromJson();
+                break;
+            case LocalizeConfig::FILETYPE_XML:
+                $values = $this->getValuesFromXml();
+                break;
+        }
+        $this->values = $values;
     }
 
     /**
@@ -113,20 +137,7 @@ class Localize extends \Tight\Modules\AbstractModule
      */
     public function setLocale($locale) {
         $this->locale = $locale;
-        $folder = \Tight\Utils::addTrailingSlash($this->getConfig()->resourceFolder);
-        $fileName = $this->getConfig()->resourceFileName . $this->getConfig()->langSeparator . $locale . "." . $this->getConfig()->resourceFileType;
-        $file = $folder . $fileName;
-        if (is_file($file)) {
-            $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
-        } else {
-            $fileName = $this->getConfig()->resourceFileName . "." . $this->getConfig()->resourceFileType;
-            $file = $folder . $fileName;
-            if (is_file($file)) {
-                $this->values = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
-            } else {
-                throw new \Tight\Exception\ModuleException("Resource file <strong>" . $file . "</strong> not found");
-            }
-        }
+        $this->reloadConfig();
     }
 
     /**
@@ -134,6 +145,21 @@ class Localize extends \Tight\Modules\AbstractModule
      * @return array Available locales
      */
     public function getLocales() {
+        $output = [];
+        switch ($this->resourceFileType) {
+            case LocalizeConfig::FILETYPE_JSON:
+                $output = $this->getLocalesFromJson();
+                break;
+            case LocalizeConfig::FILETYPE_XML:
+                $output = $this->getLocalesFromXml();
+                break;
+            case LocalizeConfig::FILETYPE_INI:
+                break;
+        }
+        return $output;
+    }
+
+    private function getLocalesFromJson() {
         $output = [];
         $directory = $this->getConfig()->resourceFolder;
         $fileName = $this->getConfig()->resourceFileName;
@@ -156,6 +182,117 @@ class Localize extends \Tight\Modules\AbstractModule
                 } else {
                     $output[] = $this->getConfig()->defaultLocale;
                 }
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * Gets the json values from the json file
+     * @return array String values
+     * @throws \Tight\Exception\ModuleException If json file cant be found
+     */
+    private function getValuesFromJson() {
+        $output = [];
+        $folder = \Tight\Utils::addTrailingSlash($this->getConfig()->resourceFolder);
+        $fileName = $this->getConfig()->resourceFileName . $this->getConfig()->langSeparator . $this->locale . "." . $this->getConfig()->resourceFileType;
+        $file = $folder . $fileName;
+        if (is_file($file)) {
+            $output = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
+        } else {
+            $fileName = $this->getConfig()->resourceFileName . "." . $this->getConfig()->resourceFileType;
+            $file = $folder . $fileName;
+            if (is_file($file)) {
+                $output = json_decode(file_get_contents($file), JSON_FORCE_OBJECT);
+            } else {
+                throw new \Tight\Exception\ModuleException("Resource file <strong>" . $file . "</strong> not found");
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * Gets the locales from the xml resource file
+     * @return array Array of locales
+     */
+    private function getLocalesFromXml() {
+        $output = [];
+        $resources = $this->getXmlResources();
+        $size = count($resources->values);
+        for ($index = 0; $index < $size; $index++) {
+            $output[] = $resources->values[$index]['lang']->__toString();
+        }
+        return $output;
+    }
+
+    /**
+     * Gets the xml resource read from the xml resource file
+     * @return \SimpleXMLElement XML values for the current locale
+     * @throws \Tight\Exception\ModuleException If xml values resource file cant be found
+     */
+    private function getXmlResources() {
+        $output = null;
+        if ($this->resourceFileType === LocalizeConfig::FILETYPE_XML) {
+            $file = \Tight\Utils::addTrailingSlash($this->getConfig()->resourceFolder) . $this->getConfig()->resourceFileName . "." . $this->resourceFileType;
+            if (is_file($file)) {
+                $xmlContent = file_get_contents($file);
+                $output = new \SimpleXMLElement($xmlContent);
+            } else {
+                throw new \Tight\Exception\ModuleException("Resource file <strong>" . $file . "</strong> does not exists");
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * Gets the values from xml resource file
+     * @return array Array of values
+     * @throws \Tight\Exception\ModuleException If the current locale cant be 
+     * found in the xml resource file
+     */
+    private function getValuesFromXml() {
+        $output = [];
+        $resources = $this->getXmlResources();
+        $locale = null;
+        $size = count($resources->values);
+        $index = 0;
+        while ($index < $size && $locale == null) {
+            if ($resources->values[$index]['lang'] == $this->locale) {
+                $locale = $resources->values[$index];
+            }
+            $index++;
+        }
+        if (null == $locale) {
+            $fileName = $this->getConfig()->resourceFileName . "." . $this->getConfig()->resourceFileType;
+            throw new \Tight\Exception\ModuleException("Locale <strong>" . $this->locale . "</strong> not found at resource file <strong>" . $fileName . "</strong>");
+        }
+        return $this->parseXmlStringValues($locale);
+    }
+
+    /**
+     * Parses a \SimpleXmlElement object to get its values
+     * @param \SimpleXMLElement $xml XML object
+     * @return array Values
+     */
+    private function parseXmlStringValues(\SimpleXMLElement $xml) {
+        $output = [];
+        if ($xml->count() > 0) {
+            $children = $xml->children();
+            for ($index = 0; $index < count($children); $index++) {
+                // If xml tag is <array>, parse without merge
+                if ($children[$index]->getName() === "array") {
+                    $key = $children[$index]['name'];
+                    if (null !== $key) {
+                        $output[$key->__toString()] = $this->parseXmlStringValues($children[$index]);
+                    }
+                } else {
+                    $output = array_merge($output, $this->parseXmlStringValues($children[$index]));
+                }
+            }
+        } else {
+            $key = $xml['name'];
+            if (null !== $key) {
+                $output[$key->__toString()] = $xml->__toString();
             }
         }
         return $output;
