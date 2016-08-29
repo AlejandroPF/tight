@@ -251,7 +251,6 @@ class Localize extends \Tight\Modules\AbstractModule
      * found in the xml resource file
      */
     private function getValuesFromXml() {
-        $output = [];
         $resources = $this->getXmlResources();
         $locale = null;
         $size = count($resources->values);
@@ -278,7 +277,8 @@ class Localize extends \Tight\Modules\AbstractModule
         $output = [];
         if ($xml->count() > 0) {
             $children = $xml->children();
-            for ($index = 0; $index < count($children); $index++) {
+            $size = count($children);
+            for ($index = 0; $index < $size; $index++) {
                 // If xml tag is <array>, parse without merge
                 if ($children[$index]->getName() === "array") {
                     $key = $children[$index]['name'];
