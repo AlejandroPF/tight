@@ -33,7 +33,7 @@ namespace Tight\Modules\Cookie;
  */
 class CookieConfig extends \Tight\BaseConfig
 {
-    public $expire = 60*60*24*30;
+    public $expire = 2592000; // 60*60*24*30
     public $path = "/";
     public $domain = "";
     public $secure = false;
