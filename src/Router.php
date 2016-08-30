@@ -80,7 +80,7 @@ class Router
         if (null !== $basePath && is_string($basePath) && !empty($basePath)) {
             $basePath = Utils::filterPath($basePath);
             if (Utils::inString($basePath, $_SERVER['DOCUMENT_ROOT'])) {
-                $this->basePath = Utils::removeSubstring($basePath, $_SERVER['DOCUMENT_ROOT']);
+                $this->basePath = Utils::removeDouble("/".Utils::removeSubstring($basePath, $_SERVER['DOCUMENT_ROOT']),"/");
             } else {
                 $this->basePath = $basePath;
             }
